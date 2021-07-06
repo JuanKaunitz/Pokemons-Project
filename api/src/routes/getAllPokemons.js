@@ -4,4 +4,4 @@ function getAllPokemons() {
     
 } 
 
-default exports getAllPokemons; 
+export default getAllPokemons; 

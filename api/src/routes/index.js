@@ -7,22 +7,14 @@ const { Pokemon, Type, Pokemon_Type} = require('../db.js');
 //const cors = require('cors');
 const { Op } = require('sequelize');
 
-//const pokemon = require('../models/Pokemon.js')
-
-//const getAllPokemons = require('./getAllPokemons');
-//router.use("/myDiets", diets)
-
 // Configurar los routers
 // Ejemplo: router.use('/auth', authRouter);
 
 const router = Router();
 
-//router.use("/pokemon" );
-
-
 //GET /:ID........................
 router.get('/pokemon/:id', async (req, res) => {
-    const id = req.params.id 
+    const id  = req.params.id 
     try {
         let poke = await Pokemon.findByPk(id);
         return res.json(poke);
@@ -30,38 +22,106 @@ router.get('/pokemon/:id', async (req, res) => {
         console.log(error)
     }
 })
+
 //GET ALL...........................
 //Traigo la data de la API
 const data = async () => {
-    const array = await axios.get('https://pokeapi.co/api/v2/pokemon?limit=40&offset=0')
-    console.log('RESPUESTA DE API: ', array.data.results);
+    const array = await axios.get('https://pokeapi.co/api/v2/pokemon?limit=2&offset=0')
+    //console.log('RESPUESTA DE API: ', array.data.results);
     return array.data.results;
 };
 
-let result = data();
-//console.log(result)
+const getPokemonDetails = async (url) => {
+    const array = await axios.get(url)
+    return array.data;
+};
+
+/* let result = data();
+//console.log(result);
 
 router.get('/pokemon', (req, res) => {
-    console.log('THESE ARE OUR POKEMONES: ', result)
-})
+    result.then((data) => {
+        res.json(data);
+    })
+}) */
 
-/* router.get('/pokemon', async (req, res) => {
+router.get('/pokemon', (req, res) => {
 
-    const name = array.query.name;
+    //const name = apiPokemons.query.name;
 
-    const apiPokemons = await data();
-    console.log('RESPUESTA DE API: ', apiPokemons.data.results);
+    let apiPokemons = data();
+    
+    let arrayDetailsPokemon = [];
+    
+    let pokemones = {
+        name: null,
+        life: null,
+        image: null,
+        speed: null,
+        height: null,
+        weight: null,
+        attack: null,
+        defense: null,
+        mine: false
+    }
+    /* let numPromesis =
+    function getPromises(numPromesis) {
+        let promises = [];
+        for (let i=0; i < numPromesis; i++) {
+            promises.push()
+        }
+    } */
+
     try {
-        let pokesDb = await Pokemon.findAll();
+        //let pokesDb = Pokemon.findAll();
+        
+        //aca va el codigo 
 
-        if(!pokesDb.length) await Pokemon.bulkCreate(apiPokemons)
+        apiPokemons.then( arrayResults => { 
+                let promises = [];
+                for(i=0; i < arrayResults.length; i++) {
+                    
+                    let pokeObj = getPokemonDetails(arrayResults[i].url)
+                    //.then(data => {console.log(data)})
+                    //promises.push(pokeObj)
+                    
+                    pokeObj.then( pokeResults => {                        
+                        pokemones.name = pokeResults.name,
+                        pokemones.life = pokeResults.stats[0].base_stat,
+                        pokemones.image = pokeResults.sprites.front_default,
+                        pokemones.speed = pokeResults.stats[5].base_stat,
+                        pokemones.height = pokeResults.height,
+                        pokemones.weight = pokeResults.weight,
+                        pokemones.attack = pokeResults.stats[1].base_stat,
+                        pokemones.defense = pokeResults.stats[2].base_stat,
+                        
+                        arrayDetailsPokemon.push(pokemones)                        
+                        console.log(arrayDetailsPokemon)
+                    })
+                
+               } 
+                res.json(arrayDetailsPokemon)
+
+                /* let allPokemonData = arrayResults.map(eachPoke => getPokemonDetails(eachPoke.url).then(objResult => {
+                    objResult.hp
+                })) 
+                console.log(allPokemonData)
+ */
+                //console.log('POKEMON DATA: ', allPokemonData)
+                //res.json(allPokemonData)
+                
+                /* if(!pokesDb.length) 
+                Pokemon.bulkCreate(arrayResults) */
+            })
     } catch (error) {
         console.log(error)
     }
+       
 
+/* 
     if (name) {
         try {
-            let poke = await Pokemon.findAll({
+            let poke = Pokemon.findAll({
                 where: {
                     name: name,
                 }
@@ -72,7 +132,7 @@ router.get('/pokemon', (req, res) => {
         }
     } else if(req.query.filter) {
         try {
-            let poke = await Pokemon.findAll({
+            let poke = Pokemon.findAll({
                 where: {
                     status: req.query.filter
                 },
@@ -88,7 +148,7 @@ router.get('/pokemon', (req, res) => {
         }
     } else {
         try {
-            let poke = await Pokemon.findAll({
+            let poke = Pokemon.findAll({
                 limit: 12,
                 offset: req.query.page,
                 order: [['name', req.query.order]],
@@ -98,34 +158,30 @@ router.get('/pokemon', (req, res) => {
         } catch (error) {
             console.log(error)
         }        
-    }
-}) */
+    } */
+})
 
 router.post('/newPokemon', async (req, res) => {
-    const newPoke = req.body;
-
-    try {
-        let poke = await Pokemon.findOrCreate({
-            where: {
-                name: Pokemon.name,
-                image: Pokemon.image,
-                status: Pokemon.status,
-                mine: Pokemon.mine,
-                hp: Pokemon.hp,
-                attack: Pokemon.attack,
-                defense: Pokemon.defense,
-                speed: Pokemon.speed,
-                weight: Pokemon.weight,
-                height: Pokemon.height
-            } 
-        });
-        return res.json(poke)
+    const {name, id, image, status, mine, life, attack, defense, height, weight, speed} = req.body;
+    //console.log(newPoke)
+     try {        
+        let poke = await Pokemon.create({                
+                name,
+                id,
+                image,
+                status,
+                mine,
+                life,
+                attack,
+                defense,
+                speed,
+                weight,
+                height,            
+        })        
+        res.send(poke)
     } catch (error) {
         console.log(error)
     }
 })
-
-
-
 
 module.exports = router;

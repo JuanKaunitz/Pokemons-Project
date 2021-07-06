@@ -8,24 +8,24 @@ module.exports = (sequelize) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    /* id: {
-      type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4,
-      allowNull:false,
-      unique: true,
+    id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      autoIncrement: true,
       primaryKey: true
-    }, */
+    },
     image: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
-    hp: { // pokemon.result.data.stats[0].base_stat
+    life: { // pokemon.result.data.stats[0].base_stat
       type: DataTypes.INTEGER,  
-      validate: {
+      allowNull: false,
+      /* validate: {
         allowNull: {
           msg: 'Life is require'
         }
-      }    
+      }   */  
     }, 
     attack: { //posicion 1
       type: DataTypes.INTEGER,      
@@ -42,10 +42,10 @@ module.exports = (sequelize) => {
     height: { ////pokemon.data.height
       type: DataTypes.INTEGER,      
     },
-    /* status: {
-      type: DataTypes.ENUM('aca enumero los campos para filtrar'),
+     status: {
+      type: DataTypes.ENUM('order', 'page'),
       allowNull: false,
-    }, */
+    }, 
     mine: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
@@ -54,6 +54,13 @@ module.exports = (sequelize) => {
   });
 };
 
+/* id: {
+  type: DataTypes.UUID,
+  defaultValue: DataTypes.UUIDV4,
+  allowNull:false,
+  unique: true,
+  primaryKey: true
+}, */
 /* Vida
 Fuerza
 Defensa
