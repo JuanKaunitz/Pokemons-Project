@@ -26,7 +26,7 @@ router.get('/pokemon/:id', async (req, res) => {
 //GET ALL...........................
 //Traigo la data de la API
 const data = async () => {
-    const array = await axios.get('https://pokeapi.co/api/v2/pokemon?limit=2&offset=0')
+    const array = await axios.get('https://pokeapi.co/api/v2/pokemon?limit=4&offset=0')
     //console.log('RESPUESTA DE API: ', array.data.results);
     return array.data.results;
 };
@@ -45,12 +45,12 @@ router.get('/pokemon', (req, res) => {
     })
 }) */
 
-router.get('/pokemon', (req, res) => {
+router.get('/pokemon', async (req, res) => {
 
     //const name = apiPokemons.query.name;
 
-    let apiPokemons = data();
-    
+    let apiPokemons = await data();
+    //res.json(apiPokemons)
     let arrayDetailsPokemon = [];
     
     let pokemones = {
@@ -64,61 +64,35 @@ router.get('/pokemon', (req, res) => {
         defense: null,
         mine: false
     }
-    /* let numPromesis =
-    function getPromises(numPromesis) {
-        let promises = [];
-        for (let i=0; i < numPromesis; i++) {
-            promises.push()
-        }
-    } */
+    try {                
+        for(i=0; i < apiPokemons.length; i++) {            
+            let pokeObj = await getPokemonDetails(apiPokemons[i].url)
+            //console.log(pokeObj.name)            
+            pokemones.name = pokeObj.name
+            pokemones.life = pokeObj.stats[0].base_stat
+            pokemones.image = pokeObj.sprites.front_default
+            pokemones.speed = pokeObj.stats[5].base_stat
+            pokemones.height = pokeObj.height
+            pokemones.weight = pokeObj.weight
+            pokemones.attack = pokeObj.stats[1].base_stat
+            pokemones.defense = pokeObj.stats[2].base_stat
+            //console.log(pokemones.name)  
+            
+            let newPokeObj = {
+                ...pokemones
+            }  
+            arrayDetailsPokemon.push(newPokeObj)                        
+        }    
+        console.log(arrayDetailsPokemon)            
 
-    try {
-        //let pokesDb = Pokemon.findAll();
-        
-        //aca va el codigo 
-
-        apiPokemons.then( arrayResults => { 
-                let promises = [];
-                for(i=0; i < arrayResults.length; i++) {
-                    
-                    let pokeObj = getPokemonDetails(arrayResults[i].url)
-                    //.then(data => {console.log(data)})
-                    //promises.push(pokeObj)
-                    
-                    pokeObj.then( pokeResults => {                        
-                        pokemones.name = pokeResults.name,
-                        pokemones.life = pokeResults.stats[0].base_stat,
-                        pokemones.image = pokeResults.sprites.front_default,
-                        pokemones.speed = pokeResults.stats[5].base_stat,
-                        pokemones.height = pokeResults.height,
-                        pokemones.weight = pokeResults.weight,
-                        pokemones.attack = pokeResults.stats[1].base_stat,
-                        pokemones.defense = pokeResults.stats[2].base_stat,
-                        
-                        arrayDetailsPokemon.push(pokemones)                        
-                        console.log(arrayDetailsPokemon)
-                    })
-                
-               } 
-                res.json(arrayDetailsPokemon)
-
-                /* let allPokemonData = arrayResults.map(eachPoke => getPokemonDetails(eachPoke.url).then(objResult => {
-                    objResult.hp
-                })) 
-                console.log(allPokemonData)
- */
-                //console.log('POKEMON DATA: ', allPokemonData)
-                //res.json(allPokemonData)
-                
-                /* if(!pokesDb.length) 
-                Pokemon.bulkCreate(arrayResults) */
-            })
+        res.send(arrayDetailsPokemon)
     } catch (error) {
-        console.log(error)
-    }
-       
-
-/* 
+    console.log(error)
+    } 
+    
+    //if(!pokesDb.length) 
+    Pokemon.bulkCreate(arrayDetailsPokemon)  
+ /*
     if (name) {
         try {
             let poke = Pokemon.findAll({

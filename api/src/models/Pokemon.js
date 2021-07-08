@@ -44,7 +44,7 @@ module.exports = (sequelize) => {
     },
      status: {
       type: DataTypes.ENUM('order', 'page'),
-      allowNull: false,
+      allowNull: true,
     }, 
     mine: {
       type: DataTypes.BOOLEAN,
