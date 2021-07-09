@@ -3,9 +3,10 @@ const { Router } = require('express');
 // Ejemplo: const authRouter = require('./auth.js');
 const axios = require('axios');
 
-const { Pokemon, Type, Pokemon_Type} = require('../db.js');
+const { Pokemon, Type, Pokemon_Type} = require('../db');
 //const cors = require('cors');
 const { Op } = require('sequelize');
+const { v4: uuidv4 } = require('uuid')
 
 // Configurar los routers
 // Ejemplo: router.use('/auth', authRouter);
@@ -13,20 +14,55 @@ const { Op } = require('sequelize');
 const router = Router();
 
 //GET /:ID........................
-router.get('/pokemon/:id', async (req, res) => {
-    const id  = req.params.id 
+router.get('/pokemons/:id', async (req, res) => {
+
+    /* const arr = []
+    const detailId = await axios.get('https://pokeapi.co/api/v2/pokemon')
+    
+    for(let i=0; i < detailId.data.results.length; i++) {
+        arr.push( {
+            name: detailId.data.results[i].name
+        })
+    }
+    console.log(arr) */
+    
+    
+
+    /* const id  = req.params.id 
     try {
         let poke = await Pokemon.findByPk(id);
         return res.json(poke);
     } catch (error) {
         console.log(error)
-    }
+    } */
+
+    /* let arrayDetailsPokemon = [];
+    
+    let pokemonesDetails = {
+        name: null,
+        id: null,
+        life: null,
+        image: null,
+        speed: null,
+        height: null,
+        weight: null,
+        attack: null,
+        defense: null,
+        mine: false    
+    } */
+    /* pokemones.id = uuidv4()
+            pokemones.life = pokeObj.stats[0].base_stat
+            pokemones.speed = pokeObj.stats[5].base_stat
+            pokemones.height = pokeObj.height
+            pokemones.weight = pokeObj.weight
+            pokemones.attack = pokeObj.stats[1].base_stat
+            pokemones.defense = pokeObj.stats[2].base_stat */
 })
 
 //GET ALL...........................
 //Traigo la data de la API
 const data = async () => {
-    const array = await axios.get('https://pokeapi.co/api/v2/pokemon?limit=4&offset=0')
+    const array = await axios.get('https://pokeapi.co/api/v2/pokemon?limit=40&offset=0')
     //console.log('RESPUESTA DE API: ', array.data.results);
     return array.data.results;
 };
@@ -35,6 +71,8 @@ const getPokemonDetails = async (url) => {
     const array = await axios.get(url)
     return array.data;
 };
+
+
 
 /* let result = data();
 //console.log(result);
@@ -45,53 +83,49 @@ router.get('/pokemon', (req, res) => {
     })
 }) */
 
-router.get('/pokemon', async (req, res) => {
-
-    //const name = apiPokemons.query.name;
-
-    let apiPokemons = await data();
-    //res.json(apiPokemons)
-    let arrayDetailsPokemon = [];
+router.get('/pokemons', async (req, res) => {
     
-    let pokemones = {
-        name: null,
-        life: null,
+    let apiPokemons = await data();    
+    let arrayPokemonsHome = [];
+    
+    let pokemones = { 
         image: null,
-        speed: null,
-        height: null,
-        weight: null,
-        attack: null,
-        defense: null,
-        mine: false
+        name: null, 
+        type: []
     }
-    try {                
-        for(i=0; i < apiPokemons.length; i++) {            
+
+    try {     
+        console.log(apiPokemons.length)           
+        for(var i=0; i < apiPokemons.length; i++) {            
             let pokeObj = await getPokemonDetails(apiPokemons[i].url)
-            //console.log(pokeObj.name)            
+            //console.log(pokeObj.name)             
             pokemones.name = pokeObj.name
-            pokemones.life = pokeObj.stats[0].base_stat
             pokemones.image = pokeObj.sprites.front_default
-            pokemones.speed = pokeObj.stats[5].base_stat
-            pokemones.height = pokeObj.height
-            pokemones.weight = pokeObj.weight
-            pokemones.attack = pokeObj.stats[1].base_stat
-            pokemones.defense = pokeObj.stats[2].base_stat
+            //console.log(pokeObj)
+            
+            let finalTypes = pokeObj.types.map(e => (e.type.name))
+            //console.log(finalTypes)
+            pokemones.type = finalTypes 
+            
+            /* for(i=0; i < arrTypes.length; i++){
+                console.log(arrTypes[i].name)
+                pokemones.type.push(arrTypes[i].name)
+            }     */
             //console.log(pokemones.name)  
             
             let newPokeObj = {
                 ...pokemones
             }  
-            arrayDetailsPokemon.push(newPokeObj)                        
+            arrayPokemonsHome.push(newPokeObj)                        
         }    
-        console.log(arrayDetailsPokemon)            
+        //console.log(arrayDetailsPokemon)           
 
-        res.send(arrayDetailsPokemon)
+        arrayPokemonsHome.push(await Pokemon.findAll())
+        res.send(arrayPokemonsHome)
     } catch (error) {
     console.log(error)
-    } 
+    }     
     
-    //if(!pokesDb.length) 
-    Pokemon.bulkCreate(arrayDetailsPokemon)  
  /*
     if (name) {
         try {
@@ -136,12 +170,12 @@ router.get('/pokemon', async (req, res) => {
 })
 
 router.post('/newPokemon', async (req, res) => {
-    const {name, id, image, status, mine, life, attack, defense, height, weight, speed} = req.body;
+    const {name, image, status, mine, life, attack, defense, height, weight, speed} = req.body;
     //console.log(newPoke)
      try {        
         let poke = await Pokemon.create({                
                 name,
-                id,
+                id: uuidv4(),
                 image,
                 status,
                 mine,
@@ -150,12 +184,42 @@ router.post('/newPokemon', async (req, res) => {
                 defense,
                 speed,
                 weight,
-                height,            
-        })        
+                height,      
+                
+            })        
+            
         res.send(poke)
     } catch (error) {
         console.log(error)
     }
+});
+
+const dataTypes = async () => {
+    const array = await axios.get('https://pokeapi.co/api/v2/type')
+    //console.log('RESPUESTA DE API: ', array.data.results);
+    return array.data.results;
+};
+
+router.get('/types', async (req, res) => {
+
+    //res.json(apiPokemons)
+    //let arrayTypeDetails = [];       
+    try {           
+        let apiPokemonsTypes = await dataTypes();
+    /* let types = apiPokemonsTypes.results[i].name
+    arrayTypeDetails.push(types)   */  
+    apiPokemonsTypes.forEach( e => {
+        Type.findOrCreate( {where: {name: e.name}}) 
+    })     
+    const dBTypes = await Type.findAll()
+    res.json(dBTypes)                       
+    //console.log(pokemones.name)         
+//filtrar repetidos
+//enviarlos en la tabla types en dB
+    } catch (error) {
+    console.log(error)
+    }    
 })
+
 
 module.exports = router;

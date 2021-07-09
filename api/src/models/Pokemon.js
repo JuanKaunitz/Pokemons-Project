@@ -9,10 +9,10 @@ module.exports = (sequelize) => {
       allowNull: false,
     },
     id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
-      autoIncrement: true,
-      primaryKey: true
+      //autoIncrement: true,
+      primaryKey: true 
     },
     image: {
       type: DataTypes.STRING,
