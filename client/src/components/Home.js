@@ -16,29 +16,30 @@ function Home() {
   const [name, setName] = useState("");
   const [search, setSearch] = useState("");
 
-  useEffect(() =>{
+    useEffect(() =>{
     if(search) {
       //console.log('ENTRE', search);
       dispatch(searchQueryPokes(search))
     } else {
       dispatch(getAllPokemons());
-    }
-  },[search])
+    } 
+  },[search]) 
 
   return(
     <div className='Home' >
-    <SearchBar onChange = {(value) => setName(value) }/>
-    <button onClick = {() => setSearch(name)}>Search</button>
+     <SearchBar setSearch={setSearch}></SearchBar> 
+     {/* <SearchBar onChange = {(value) => setName(value) }/> */}
+    {/* <button onClick = {() => setSearch(name)}>Search</button> */}
       <ul>
       <h2>Look for your favourite Pokemon</h2>
       {
         getPokes.length > 0 ? getPokes.map(poke => (   
         <li key = {poke.id}> 
-        <Link to = {`/details/${poke.id}`}><Card poke = {poke} key = {poke.id}/></Link>
+        <Link key={poke.id} to = {`/details/${poke.id}`}><Card poke = {poke} key = {poke.id}/></Link>
         </li>
         )): <h1>Loading ...</h1>
       }
-      </ul>
+      </ul> 
     </div>
   )
 }
