@@ -1,24 +1,53 @@
+import {
+  GET_ALL_POKEMONS,
+  ADD_NEW_POKE,
+  SEARCH_POKE,
+  GET_TYPE,
+  GET_POKE_ID,
+} from "../constants";
 
 const initialState = {
-  recipe: [],
-  recipeDetail: {},
+  getPokes: [], 
+  addPoke: {}, 
+  searchPoke: [],
+  getTypes: [], 
+  getDetails: [],
 };
 
-export default function rootReducer(state = initialState, action) {
+const rootReducer = (state = initialState, action) => {
   switch (action.type) {
-    case '1':
-      console.log(action.payload.data, "aaaa");
-      return { ...state, recipe: action.payload.data };
-
-    case '':
+    case GET_ALL_POKEMONS:
       return {
         ...state,
-        recipeDetail: action.payload,
+        getPokes: action.payload,
+      };
+
+    case ADD_NEW_POKE:
+      return {
+        ...state,
+        addPoke: action.payload,
+      };
+
+    case SEARCH_POKE:
+      return {
+        ...state,
+        getPokes: action.payload,
+      };
+
+    case GET_TYPE:
+      return {
+        ...state,
+        getTypes: action.payload,
+      };
+    case GET_POKE_ID:
+      return {
+        ...state,
+        getDetails: action.payload,
       };
 
     default:
-      return {
-        ...state,
-      };
+      return state;
   }
-}
+};
+
+export default rootReducer;
