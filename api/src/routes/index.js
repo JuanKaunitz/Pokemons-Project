@@ -17,26 +17,34 @@ const router = Router();
 
 router.get('/pokemons/:id', async (req, res) => { 
     var detalles = [];
-    const  Id  = req.params.id      
-    let resp = await axios.get(`https://pokeapi.co/api/v2/pokemon/${Id}`); 
- 
-    if (resp.data) { 
-      detalles.push({
-        name: resp.data.name,
-        id: resp.data.id,
-        life: resp.data.stats[0].base_stat,
-        image: resp.data.sprites.front_default,
-        speed: resp.data.stats[5].base_stat,
-        height: resp.data.height,
-        weight: resp.data.weight,
-        attack: resp.data.stats[1].base_stat,
-        defense: resp.data.stats[2].base_stat,
-        mine: false    
-      });
-    }
+    const  Id  = req.params.id    
+    
+    if(Id.includes('-')) {
+        const pokeId = await Pokemon.findOne({
+            where: {
+                id: Id,
+            }
+        }) 
+        return res.json(pokeId);
+    } else {
+        let resp = await axios.get(`https://pokeapi.co/api/v2/pokemon/${Id}`);      
+        if (resp.data) { 
+          detalles.push({
+            name: resp.data.name,
+            id: resp.data.id,
+            life: resp.data.stats[0].base_stat,
+            image: resp.data.sprites.front_default,
+            speed: resp.data.stats[5].base_stat,
+            height: resp.data.height,
+            weight: resp.data.weight,
+            attack: resp.data.stats[1].base_stat,
+            defense: resp.data.stats[2].base_stat,
+            mine: false    
+          });
+        }
+    }    
   
-  res.json(detalles);
-  
+    return res.json(detalles);  
 });
 
 //GET ALL...........................
@@ -52,17 +60,6 @@ const getPokemonDetails = async (url) => {
     return array.data;
 };
 
-
-
-/* let result = data();
-//console.log(result);
-
-router.get('/pokemon', (req, res) => {
-    result.then((data) => {
-        res.json(data);
-    })
-}) */
-
 router.get('/pokemons', async (req, res) => {
     let { name } = req.query;
     let apiPokemons = await data();    
@@ -71,24 +68,38 @@ router.get('/pokemons', async (req, res) => {
     let pokemones = { 
         image: null,
         name: null, 
-        type: []
+        type: [],
+        id: null
     }      
-    if (name) {        
+    if (name) {     
+        
         try {
+            //console.log(pokeName)
+           /*  const dbPoke = await Pokemon.findOne({
+                where: {
+                    name: name
+                }
+                
+            })            
+            dbPoke ? res.json(dbPoke) : res.json('No Pokemon Found');            */ 
+            
             let pokeName = await axios.get(`https://pokeapi.co/api/v2/pokemon/${name}`);
-            console.log(pokeName)
             if(!pokeName) {
                 return res.send('No Pokemon Found');
-            } else {               
+
+            } else {                
                 pokemones.name = pokeName.data.name
                 pokemones.image = pokeName.data.sprites.front_default
                 let finalTypes = pokeName.data.types.map(e => (e.type.name))
-                pokemones.type = finalTypes 
+                pokemones.type = finalTypes                 
+
                 res.send(pokemones);
             }
+
         } catch (error) {
         console.log(error)
         }  
+
     } else {
         try {     
             for(var i=0; i < apiPokemons.length; i++) {            
@@ -96,6 +107,7 @@ router.get('/pokemons', async (req, res) => {
                              
                 pokemones.name = pokeObj.name
                 pokemones.image = pokeObj.sprites.front_default
+                pokemones.id = pokeObj.id
                 
                 
                 let finalTypes = pokeObj.types.map(e => (e.type.name))
@@ -106,9 +118,9 @@ router.get('/pokemons', async (req, res) => {
                 }  
                 arrayPokemonsHome.push(newPokeObj)                        
             }             
-    
-            arrayPokemonsHome.push(await Pokemon.findAll())
-            res.send(arrayPokemonsHome)
+            let resp = await Pokemon.findAll()
+            const sendPokemonsHome = resp.concat(arrayPokemonsHome)
+            res.send(sendPokemonsHome)
         } catch (error) {
             console.log(error)
         }      
@@ -162,7 +174,7 @@ router.get('/pokemons', async (req, res) => {
 
 router.post('/newPokemon', async (req, res) => {
     const {name, image, status, mine, life, attack, defense, height, weight, speed} = req.body;
-    //console.log(newPoke)
+    
      try {        
         let poke = await Pokemon.create({                
                 name,
@@ -175,10 +187,18 @@ router.post('/newPokemon', async (req, res) => {
                 defense,
                 speed,
                 weight,
-                height,      
-                
-            })        
-        console.log(poke)    
+                height,         
+            })  
+
+            /* if(type){
+                type.forEach(async(element)  => {
+                 let genresGame = await Type.findOne({
+                     where: {name:element} //segun que lo tengo que buscar
+                 })
+                 await videogameCreated.addGenre(genresGame)
+                });
+            }   */
+          
         res.send(poke)
     } catch (error) {
         console.log(error)

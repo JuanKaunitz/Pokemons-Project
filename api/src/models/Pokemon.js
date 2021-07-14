@@ -4,7 +4,7 @@ const { DataTypes } = require('sequelize');
 module.exports = (sequelize) => {
   // defino el modelo
   sequelize.define('pokemon', {
-    name: { //pokemon.data.name
+    name: { 
       type: DataTypes.STRING,
       allowNull: false,
     },
@@ -18,28 +18,23 @@ module.exports = (sequelize) => {
       type: DataTypes.STRING,
       allowNull: true,
     },
-    life: { // pokemon.result.data.stats[0].base_stat
+    life: { 
       type: DataTypes.INTEGER,  
-      allowNull: false,
-      /* validate: {
-        allowNull: {
-          msg: 'Life is require'
-        }
-      }   */  
+      allowNull: false,      
     }, 
-    attack: { //posicion 1
+    attack: { 
       type: DataTypes.INTEGER,      
     },
-    defense: { //stats posicion 2
+    defense: { 
       type: DataTypes.INTEGER,      
     },    
-    speed: { // stats posicion 5
+    speed: { 
       type: DataTypes.INTEGER,      
     },
-    weight: { //pokemon.data.weight
+    weight: { 
       type: DataTypes.INTEGER,      
     },
-    height: { ////pokemon.data.height
+    height: { 
       type: DataTypes.INTEGER,      
     },
      status: {
@@ -53,17 +48,3 @@ module.exports = (sequelize) => {
     },
   });
 };
-
-/* id: {
-  type: DataTypes.UUID,
-  defaultValue: DataTypes.UUIDV4,
-  allowNull:false,
-  unique: true,
-  primaryKey: true
-}, */
-/* Vida
-Fuerza
-Defensa
-Velocidad
-Altura
-Peso */

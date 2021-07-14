@@ -27,7 +27,7 @@ function Home() {
 
   return(
     <div className='Home' >
-     <SearchBar setSearch={setSearch}></SearchBar> 
+     <SearchBar setSearch={setSearch} setName={setName}></SearchBar> 
      {/* <SearchBar onChange = {(value) => setName(value) }/> */}
     {/* <button onClick = {() => setSearch(name)}>Search</button> */}
       <ul>
@@ -35,7 +35,7 @@ function Home() {
       {
         getPokes.length > 0 ? getPokes.map(poke => (   
         <li key = {poke.id}> 
-        <Link key={poke.id} to = {`/details/${poke.id}`}><Card poke = {poke} key = {poke.id}/></Link>
+        <Link  to = {`/details/${poke.id}`}><Card poke = {poke} key = {poke.id}/></Link>
         </li>
         )): <h1>Loading ...</h1>
       }

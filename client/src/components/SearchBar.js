@@ -1,21 +1,26 @@
 const SearchBar = (props) => {
     
-  function onClickHandler(event) {
-      console.log(event.target.value)
-    event.preventDefault()
-    props.setSearch(event.target.value)
-  }
+    const handleInputChange = (e) => {
+        e.preventDefault()
+        props.setName(e.target.value)
+    }
+    
+    const onClickHandler = (e) => {
+        console.log(e.target.value)
+        e.preventDefault()
+        props.setSearch(e.target.value)
+    }
     return (
-    <form >
+        <form >
         <label >Search Pokemon</label>
         <input
             type="text"            
             placeholder="Search Pokemon"             
-        />
-        <button onClick={onClickHandler} type="submit">Search</button>
+            onChange={(e) => {handleInputChange(e)}}  
+            />
+        <button onClick={(e) => {onClickHandler(e)}} type="submit">Search</button>
     </form>
   )
-
 };
 
 export default SearchBar;
