@@ -8,6 +8,8 @@ import { Link } from 'react-router-dom';
 import Card from "./Card";
 import SearchBar from "./SearchBar";
 import { useState } from 'react';
+import Pagination from './Pagination';
+
 
 function Home() {
 
@@ -22,16 +24,6 @@ function Home() {
     await dispatch(searchQueryPokes(name))        
   }
 
-  /* let actualPage = [];
-  let twelves =[]
-  function firstTwelves(getPokes) {
-    if(getPokes) {
-      for(let i=0; i < 11; i++) {
-         twelves = getPokes[i];
-      }
-      return actualPage
-    }
-  } */
 
   useEffect(() =>{
     if(search) {
@@ -45,11 +37,8 @@ function Home() {
   return(
 
   <div className='Home' >
-    <SearchBar setSearch={setSearch} setName={setName} ></SearchBar> 
-    <br></br>
-    <button >Prev</button> 
-    <button >Next</button>
-         
+    <SearchBar setSearch={setSearch} setName={setName} ></SearchBar>   
+    
     <ul>
     <h2>Look for your favourite Pokemon</h2>
       {  
@@ -58,13 +47,7 @@ function Home() {
             <Card poke = {searchPoke} key = {searchPoke.id}/>        
           </Link> 
         :      
-        (getPokes.length > 0 ? getPokes.map(poke => (   
-          <ul key = {poke.id}> 
-            <Link  to = {`/details/${poke.id}`} /* mostrar el res de getDetails */ >          
-              <Card poke = {poke} key = {poke.id}/>
-            </Link>
-          </ul>
-        )): <h1>Loading ...</h1>)
+        (getPokes.length > 0 ? <Pagination></Pagination> : <h1>Loading ...</h1>)
       }
     </ul> 
   </div>

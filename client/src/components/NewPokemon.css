@@ -1,0 +1,102 @@
+.todo {
+    margin: 0px;
+    padding: 0px;
+  }
+  
+  .h {
+    display: flex;
+    justify-content: center;
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+  }
+  .conta {
+    background: linear-gradient(
+      90deg,
+      rgba(245, 193, 126, 0.9) 35%,
+      rgba(109, 224, 224, 0.9) 100%
+    );
+  
+    height: auto;
+    width: 40rem;
+    border-radius: 10px;
+    padding: 10px;
+  }
+  
+  .info {
+    margin: 1rem;
+    display: flex;
+    justify-content: center;
+  }
+  .info button {
+    margin: 2px;
+    color: white;
+    font-family: "Kalam", cursive;
+    font-size: 1.5rem;
+    background: rgba(128, 233, 228, 0.5);
+    border: 1px solid white;
+    border-radius: 5px;
+    height: 2.5rem;
+    width: 10rem;
+  }
+  .button {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+  }
+  .info button:hover {
+    background-color: teal;
+  }
+  .inst {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .inp {
+    display: flex;
+    justify-content: center;
+  }
+  .inp input {
+    margin-bottom: 5px;
+    margin-right: 5px;
+    border: 2px solid lightblue;
+    border-radius: 5px;
+    height: 1.5rem;
+    width: 20rem;
+  }
+  
+  .info h1 {
+    text-align: center;
+    font-family: "Merienda", cursive;
+  }
+  .inst input {
+    margin-bottom: 5px;
+    margin-right: 5px;
+    border: 2px solid lightblue;
+    border-radius: 5px;
+    height: 3rem;
+  
+    width: 20rem;
+  }
+  .inp b {
+    margin-left: 3rem;
+  }
+  .inst b {
+    margin-left: 3rem;
+  }
+  hr {
+    border: transparent;
+  }
+  .check {
+    display: flex;
+    margin-left: 3rem;
+  }
+  .check p {
+    margin-bottom: 4px;
+    margin-top: 0px;
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+  
+  .danger {
+    color: red;
+  }

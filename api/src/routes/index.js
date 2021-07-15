@@ -133,15 +133,14 @@ router.get('/pokemons', async (req, res) => {
 
 
 router.post('/newPokemon', async (req, res) => {
-    const { name, image, status, mine, life, attack, defense, height, weight, speed } = req.body;
+    const { name, image, types,  life, attack, defense, height, weight, speed } = req.body;
     
      try {        
         let poke = await Pokemon.create({                
                 name,
                 id: uuidv4(),
                 image,
-                status,
-                mine,
+                types,                
                 life,
                 attack,
                 defense,
@@ -173,15 +172,15 @@ const dataTypes = async () => {
 };
 
 router.get('/types', async (req, res) => {
-
-    //res.json(apiPokemons)
-    //let arrayTypeDetails = [];       
+          
     try {           
         let apiPokemonsTypes = await dataTypes();
     /* let types = apiPokemonsTypes.results[i].name
     arrayTypeDetails.push(types)   */  
     apiPokemonsTypes.forEach( e => {
-        Type.findOrCreate( {where: {name: e.name}}) 
+        Type.findOrCreate( {where: {
+            name: e.name            
+        }}) 
     })     
     const dBTypes = await Type.findAll()
     res.json(dBTypes)                       
