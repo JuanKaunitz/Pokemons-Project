@@ -11,7 +11,7 @@ const initialState = {
   addPoke: {}, 
   searchPoke: [],
   getTypes: [], 
-  getDetails: [],
+  getDetails: {},
 };
 
 const rootReducer = (state = initialState, action) => {

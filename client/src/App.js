@@ -14,7 +14,7 @@ function App () {
             <NavBar></NavBar>
           <Switch>      
             <Route path="/home" exact component={Home} />
-            <Route path="/details"  component={Details} />
+            <Route path="/details/:id" exact component={Details} />
             <Route path="/newpokemon" exact component={NewPokemon} /> 
             <Route path="/" exact component={Landing} />  
           </Switch>          

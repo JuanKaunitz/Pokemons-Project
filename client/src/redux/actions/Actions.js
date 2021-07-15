@@ -53,7 +53,7 @@ export const searchQueryPokes = (name) => async (dispatch) => {
  //Obteniendo juegos por ID.
  export const getPokeById = (id) => async (dispatch) => {
     try {
-        const res = await axios.get(`http://localhost:3001/pokemons/${id}`);
+        const res = await axios.get(`http://localhost:3001/pokemons/${id}`);        
         dispatch({
             type: GET_POKE_ID,
             payload: res.data
