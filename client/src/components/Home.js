@@ -13,47 +13,64 @@ function Home() {
 
   const dispatch = useDispatch();
   const getPokes = useSelector((state) => state.getPokes);
+  const searchPoke = useSelector((state) => state.searchPoke);
   const [name, setName] = useState("");
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState(false);
+  const [displayResults, setDisplayResults] = useState(getPokes)
 
-    useEffect(() =>{
+  async function searchPokemon(name) {
+    await dispatch(searchQueryPokes(name))        
+  }
+
+  /* let actualPage = [];
+  let twelves =[]
+  function firstTwelves(getPokes) {
+    if(getPokes) {
+      for(let i=0; i < 11; i++) {
+         twelves = getPokes[i];
+      }
+      return actualPage
+    }
+  } */
+
+  useEffect(() =>{
     if(search) {
-      //console.log('ENTRE', search);
-      dispatch(searchQueryPokes(search))
+      searchPokemon(name)      
     } else {
       dispatch(getAllPokemons());
     } 
   },[search]) 
 
+  
   return(
-    <div className='Home' >
-     <SearchBar setSearch={setSearch} setName={setName}></SearchBar> 
-     {/* <SearchBar onChange = {(value) => setName(value) }/> */}
-    {/* <button onClick = {() => setSearch(name)}>Search</button> */}
-      <ul>
-      <h2>Look for your favourite Pokemon</h2>
-      {
-        getPokes.length > 0 ? getPokes.map(poke => (   
-        <li key = {poke.id}> 
-        <Link  to = {`/details/${poke.id}`}><Card poke = {poke} key = {poke.id}/></Link>
-        </li>
-        )): <h1>Loading ...</h1>
+
+  <div className='Home' >
+    <SearchBar setSearch={setSearch} setName={setName} ></SearchBar> 
+    <br></br>
+    <button >Prev</button> 
+    <button >Next</button>
+         
+    <ul>
+    <h2>Look for your favourite Pokemon</h2>
+      {  
+        search ? 
+          <Link to={`/details/${searchPoke.id}`} >          
+            <Card poke = {searchPoke} key = {searchPoke.id}/>        
+          </Link> 
+        :      
+        (getPokes.length > 0 ? getPokes.map(poke => (   
+          <ul key = {poke.id}> 
+            <Link  to = {`/details/${poke.id}`} /* mostrar el res de getDetails */ >          
+              <Card poke = {poke} key = {poke.id}/>
+            </Link>
+          </ul>
+        )): <h1>Loading ...</h1>)
       }
-      </ul> 
-    </div>
+    </ul> 
+  </div>
   )
 }
 
 export default Home;
-/* function home() {
-  return (
-    <div className="Home">
-      <h1>Look for your favourite Pokemon</h1>     
-      
-        
-        <br></br>
-      <button >Prev</button> 
-      <button >Next</button>
-    </div>
-  );
-} */
+
+

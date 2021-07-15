@@ -9,7 +9,7 @@ function Card({poke}) {
             <h4>Types:</h4> 
             {
                 poke.type && poke.type.map((el,i) => {
-                    return <li key={i}>{el.name}</li>
+                    return <li key={i}>{el}</li>
                 } )
             }
         </div>

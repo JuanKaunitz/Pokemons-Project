@@ -23,7 +23,7 @@ router.get('/pokemons/:id', async (req, res) => {
         const pokeId = await Pokemon.findOne({
             where: {
                 id: Id,
-            }
+            }, include: type,
         }) 
         return res.json(pokeId);
     } else {
@@ -39,7 +39,8 @@ router.get('/pokemons/:id', async (req, res) => {
             weight: resp.data.weight,
             attack: resp.data.stats[1].base_stat,
             defense: resp.data.stats[2].base_stat,
-            mine: false    
+            mine: false,
+            types: resp.data.types.map(e => (e.type.name))    
           });
         }
     }    
@@ -71,17 +72,19 @@ router.get('/pokemons', async (req, res) => {
         type: [],
         id: null
     }      
+    //console.log(name)
     if (name) {     
         
         try {
-            //console.log(pokeName)
-           /*  const dbPoke = await Pokemon.findOne({
+            let dBPoke = await Pokemon.findOne({
                 where: {
-                    name: name
+                    name: name,
                 }
-                
-            })            
-            dbPoke ? res.json(dbPoke) : res.json('No Pokemon Found');            */ 
+            })
+
+            if(dBPoke) {
+                return res.send(dBPoke)
+            }
             
             let pokeName = await axios.get(`https://pokeapi.co/api/v2/pokemon/${name}`);
             if(!pokeName) {
@@ -90,8 +93,9 @@ router.get('/pokemons', async (req, res) => {
             } else {                
                 pokemones.name = pokeName.data.name
                 pokemones.image = pokeName.data.sprites.front_default
+                pokemones.id = pokeName.data.id
                 let finalTypes = pokeName.data.types.map(e => (e.type.name))
-                pokemones.type = finalTypes                 
+                pokemones.type = finalTypes 
 
                 res.send(pokemones);
             }
@@ -124,56 +128,12 @@ router.get('/pokemons', async (req, res) => {
         } catch (error) {
             console.log(error)
         }      
-    }  
-    /* else if(req.query.filter) {
-    try {
-        let poke = Pokemon.findAll({
-                where: {
-                    status: req.query.filter
-                },
-                limit: 12,
-                offset: req.query.page,
-                order: [['name', req.query.order]],
-                include: { model: Type}
-
-            });
-            return res.json(poke)
-        } catch (error) {
-            console.log(error)
-        }
-    } else {
-        try {
-            let poke = Pokemon.findAll({
-                limit: 12,
-                offset: req.query.page,
-                order: [['name', req.query.order]],
-                include: { model: Type}
-            });
-            return res.json(poke)
-        } catch (error) {
-            console.log(error)
-        }        
-    }  */
-    
+    }      
 });
 
-/*  
-    let pokemones = { 
-        image: null,
-        name: null, 
-        type: [],        
-        id: null,
-        life: null,
-        attack: null,
-        defense: null,
-        speed: null,
-        height: null,
-        weight: null,
-    }    
-*/
 
 router.post('/newPokemon', async (req, res) => {
-    const {name, image, status, mine, life, attack, defense, height, weight, speed} = req.body;
+    const { name, image, status, mine, life, attack, defense, height, weight, speed } = req.body;
     
      try {        
         let poke = await Pokemon.create({                
@@ -191,9 +151,11 @@ router.post('/newPokemon', async (req, res) => {
             })  
 
             /* if(type){
-                type.forEach(async(element)  => {
-                 let genresGame = await Type.findOne({
-                     where: {name:element} //segun que lo tengo que buscar
+                type.forEach(async (element)  => {
+                 let typePoke = await Type.findOne({
+                     where: {
+                         name:name
+                    }, include() //segun que lo tengo que buscar
                  })
                  await videogameCreated.addGenre(genresGame)
                 });
@@ -207,7 +169,6 @@ router.post('/newPokemon', async (req, res) => {
 
 const dataTypes = async () => {
     const array = await axios.get('https://pokeapi.co/api/v2/type')
-    //console.log('RESPUESTA DE API: ', array.data.results);
     return array.data.results;
 };
 

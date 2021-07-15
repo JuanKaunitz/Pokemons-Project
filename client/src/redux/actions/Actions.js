@@ -24,10 +24,10 @@ export const getAllPokemons = () => async (dispatch) => {
 
 //Buscar pokemons por query.
 export const searchQueryPokes = (name) => async (dispatch) => {
-    console.log('searchQueryPokes')
+    
     try {
-        const res = await axios.get(`http://localhost:3001/pokemons?search=${name}`);
-        // console.log('RUTAAA', res);
+        const res = await axios.get(`http://localhost:3001/pokemons?name=${name}`);
+        console.log('RUTAAA', res);
         dispatch({
             type: SEARCH_POKE,
             payload: res.data

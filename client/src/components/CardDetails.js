@@ -1,11 +1,7 @@
 import React from 'react'
-import './Card.css';
-import { useSelector } from 'react-redux';
+import './CardDetails.css';
 
-const getDetails = useSelector((state) => state.getDetails);
-
-
-function CardDetails() {
+function CardDetails({getDetails}) {
     return (
         <div className = "card-container">
             <h1>{getDetails.name}</h1>
@@ -20,7 +16,7 @@ function CardDetails() {
             </li>
             <h3>Height: {getDetails.height}</h3>
             <h3>Weight: {getDetails.weight}</h3>
-            <bk></bk>
+            <br></br>
             <h4>Types:</h4> 
             {
                 getDetails.type && getDetails.type.map((el,i) => {

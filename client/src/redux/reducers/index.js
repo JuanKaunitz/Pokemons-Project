@@ -29,9 +29,10 @@ const rootReducer = (state = initialState, action) => {
       };
 
     case SEARCH_POKE:
+      console.log(action.payload)
       return {
         ...state,
-        getPokes: action.payload,
+        searchPoke: action.payload,        
       };
 
     case GET_TYPE:

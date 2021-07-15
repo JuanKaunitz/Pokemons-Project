@@ -1,14 +1,14 @@
 const SearchBar = (props) => {
     
     const handleInputChange = (e) => {
+        //console.log(e.target.value + 'SearchBar')
         e.preventDefault()
         props.setName(e.target.value)
     }
     
     const onClickHandler = (e) => {
-        console.log(e.target.value)
         e.preventDefault()
-        props.setSearch(e.target.value)
+        props.setSearch(true)
     }
     return (
         <form >
