@@ -22,7 +22,7 @@ function Details() {
 
     return (
     <div>
-     {/* { getDetails && <CardDetails getDetails = {getDetails[0]} key={getDetails[0].id}>Know your Pokemon closer!!!</CardDetails> }  */}      
+     { getDetails.length !== 0 ? <CardDetails getDetails = {getDetails[0]} key={getDetails[0].id}>Know your Pokemon closer!!!</CardDetails> : <p>Searching...</p>}       
     </div>
     )
 }
