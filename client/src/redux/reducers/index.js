@@ -4,6 +4,10 @@ import {
   SEARCH_POKE,
   GET_TYPE,
   GET_POKE_ID,
+  ORDER_ASC_ATTACK,
+  ORDER_DESC_ATTACK,
+  ORDER_ASC_NAME,
+  ORDER_DESC_NAME
 } from "../constants";
 
 const initialState = {
@@ -12,6 +16,8 @@ const initialState = {
   searchPoke: [],
   getTypes: [], 
   getDetails: [],
+  orderBy: 'Order by: ',
+  filterPokes: [],
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -45,6 +51,31 @@ const rootReducer = (state = initialState, action) => {
         ...state,
         getDetails: action.payload,
       };
+    case ORDER_ASC_NAME:
+      return {
+        ...state,
+        filterPokes: action.payload.pokesOrder,
+        orderBy: action.payload.name,
+      };
+    case ORDER_ASC_ATTACK:
+      return {
+        ...state,
+        filterPokes: action.payload.pokesOrder,
+        orderBy: action.payload.name,
+      };
+    case ORDER_DESC_NAME:
+      return {
+        ...state,
+        filterPokes: action.payload.pokesOrder,
+        orderBy: action.payload.name,
+      };
+    case ORDER_DESC_ATTACK:
+      return {
+        ...state,
+        filterPokes: action.payload.pokesOrder,
+        orderBy: action.payload.name,
+      };
+  
 
     default:
       return state;

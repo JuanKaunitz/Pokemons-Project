@@ -8,7 +8,8 @@ import { getPokeById, clearPoke } from '../redux/actions/Actions';
 function Details() {     
     
     const dispatch = useDispatch();
-    const getDetails = useSelector((state) => state.getDetails);       
+    const getDetails = useSelector((state) => state.getDetails);
+           
     let { id }  = useParams();
     
         useEffect( () => {  

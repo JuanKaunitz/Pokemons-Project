@@ -1,68 +1,69 @@
 import React, { useState } from "react";
 import style from "./NewPokemon.css";
-//import { connect } from "react-redux";
-import {  } from "react-router-dom";
-import axios from "axios";
+import { useDispatch } from 'react-redux';
+import { postPoke } from "../redux/actions/Actions";
+
 
 export default function NewPokemon() {
+
+  const dispatch = useDispatch();
   const [errors, setErrors] = useState({});
   const [input, setInput] = useState({
     name: "",
     image:    
-      "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80",
+    "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80",
     types: [],
-    id:"",
-    life: "",
-    attack: "",
-    defense: "",
-    speed: "",
-    weight: "",
-    height: ""
-});
-
+    life: 0,
+    attack: 0,
+    defense: 0,
+    speed: 0,
+    weight: 0,
+    height: 0
+  });
+  
   function handleChange(e) {
     let arr = [];
     let qwe = document.getElementsByClassName("in");
-    //console.log(qwe, "hh");
+    console.log(e.target.name);
     for (let i = 0; i < qwe.length; i++) {
       if (qwe[i].checked === true) {
-        arr.push(qwe[i].value);
+        arr.push(parseInt(qwe[i].value));
       }
     }
-
+    
     setInput({
       ...input,
       types: arr,
       [e.target.name]: e.target.value,
     });
-
+    
     setErrors(
       validate({
         ...input,
-        [e.target.name]: e.target.value,
+        //[e.target.name]: e.target.value,
       })
-    );
-  }
-
-  async function handleSubmit(e) {
-    e.preventDefault();
-    console.log(errors, "erros");
+      );
+    }
+    
+    async function handleSubmit(e) {
+      e.preventDefault();
+    console.log(input);
     let qqq = Object.values(errors);
     console.log(qqq, "asdasdas");
     if (qqq.length === 0) {
-      console.log("axioss");
-      axios
-        .post("http://localhost:3001/newPokemon", input)
-        .then((res) => alert("Pokemon Created"));
+      await dispatch(postPoke(input));
+      return alert("Pokemon Created!");
+      
+      
     } else {
       return alert("You must need Complete the form!");
     }
     //   if (errors.name) {
-    //     return alert("You must need Complete the form!");
-    //   } else if (errors.summary) {
+      //     return alert("You must need Complete the form!");
+      //   } else if (errors.summary) {
         //     return alert("You must need Complete the form!");
-    //   } else if (errors.diets) {
-    //     return alert("You must need Complete the form!");
+        //   } else if (errors.diets) {
+          //     return alert("You must need Complete the form!");
     //   } else if (errors.spoonacularScore) {
     //     return alert("You must need Complete the form!");
     //   } else if (errors.healthScore) {
@@ -79,37 +80,33 @@ export default function NewPokemon() {
 
     if (!input.name) {
       errors.name = "Name is required";
-    }
-    if (!input.id) {
-      errors.id = "Id is required";
-    }
+    }    
     if (input.types.length === 0) {
       errors.types = "Types are required";
     }
-    if (isNaN(input.life) || !input.life) {
+    if (isNaN(input.life)) {
       errors.life = "Must be a Number!";
     }
-    if (isNaN(input.attack) || !input.attack) {
+    if (isNaN(input.attack)) {
       errors.attack = "Must be a Number!";
     }
-    if (isNaN(input.defense) || !input.defense) {
+    if (isNaN(input.defense)) {
         errors.defense = "Must be a Number!";
       }
-    if (isNaN(input.speed) || !input.speed) {
+    if (isNaN(input.speed)) {
         errors.speed = "Must be a Number!";
       }
-      if (isNaN(input.weight) || !input.weight) {
+      if (isNaN(input.weight)) {
         errors.weight = "Must be a Number!";
       }
-      if (isNaN(input.height) || !input.height) {
+      if (isNaN(input.height)) {
         errors.height = "Must be a Number!";
       }
 
     return errors;
   }
 
-  return (
-      <form >
+  return (      
       <div className={style.todo}>
       <div className={style.h}>
         <div className={style.conta}>
@@ -125,8 +122,8 @@ export default function NewPokemon() {
                   className={`${errors.name && style.danger}`}
                   placeholder="Name..."
                   type="text"
-                  name="Name"
-                  onChange={handleChange}
+                  name="name"
+                  onChange={(e) => {handleChange(e)}}
                   value={input.name}
                 />
                 <label>
@@ -135,25 +132,6 @@ export default function NewPokemon() {
                   )}
                 </label>
               </div>
-              <div className={style.inst}>
-                <p>
-                  <b>• Id </b>
-                </p>
-                <hr />
-                <input
-                  className={`${errors.id && style.danger}`}
-                  placeholder="Id..."
-                  type="text"
-                  name="Id"
-                  onChange={handleChange}
-                  value={input.id}
-                />
-
-                {errors.id && (
-                  <p className={style.danger}>{errors.id}!</p>
-                )}
-              </div>
-
               <div className={style.inp}>
                 <label>
                   <b>• Life </b>
@@ -162,8 +140,8 @@ export default function NewPokemon() {
                 <input
                   placeholder="Life..."
                   type="text"
-                  name="Life"
-                  onChange={handleChange}
+                  name="life"
+                  onChange={(e) => {handleChange(e)}}
                   value={input.life}
                 />
                 {errors.life && (
@@ -178,8 +156,8 @@ export default function NewPokemon() {
                 <input
                   placeholder="Attack..."
                   type="text"
-                  name="Attack"
-                  onChange={handleChange}
+                  name="attack"
+                  onChange={(e) => {handleChange(e)}}
                   value={input.attack}
                 />
               </div>
@@ -195,8 +173,8 @@ export default function NewPokemon() {
                   className={`${errors.defense && style.danger}`}
                   placeholder="Defense..."
                   type="text"
-                  name="Defense"
-                  onChange={handleChange}
+                  name="defense"
+                  onChange={(e) => {handleChange(e)}}
                   value={input.defense}
                 />
                 {errors.defense && (
@@ -211,8 +189,8 @@ export default function NewPokemon() {
                 <input
                   placeholder="Speed..."
                   type="text"
-                  name="Speed"
-                  onChange={handleChange}
+                  name="speed"
+                  onChange={(e) => {handleChange(e)}}
                   value={input.speed}
                 />
                 {errors.speed && (
@@ -227,8 +205,8 @@ export default function NewPokemon() {
                 <input
                   placeholder="Weight..."
                   type="text"
-                  name="Weight"
-                  onChange={handleChange}
+                  name="weight"
+                  onChange={(e) => {handleChange(e)}}
                   value={input.weight}
                 />
                 {errors.weight && (
@@ -243,8 +221,8 @@ export default function NewPokemon() {
                 <input
                   placeholder="Height..."
                   type="text"
-                  name="Height"
-                  onChange={handleChange}
+                  name="height"
+                  onChange={(e) => {handleChange(e)}}
                   value={input.height}
                 />
                 {errors.height && (
@@ -266,145 +244,137 @@ export default function NewPokemon() {
               <p>flying</p>
                 <input
                   type="checkbox"
-                  class="in"
+                  className="in"
                   value="1"
-                  onChange={handleChange}
+                  onChange={(e) => {handleChange(e)}}
                 />
                 <p>ground</p>
                 <input
                   type="checkbox"
-                  class="in"
+                  className="in"
                   value="2"
-                  onChange={handleChange}
+                  onChange={(e) => {handleChange(e)}}
                 />
                 <p>ghost</p>
                 <input
                   type="checkbox"
-                  class="in"
+                  className="in"
                   value="3"
-                  onChange={handleChange}
-                />
+                  onChange={(e) => {handleChange(e)}}                />
                 <p>steel</p>
                 <input
                   type="checkbox"
-                  class="in"
+                  className="in"
                   value="4"
-                  onChange={handleChange}
+                  onChange={(e) => {handleChange(e)}}
                 />
                 <p>electric</p>
                 <input
                   type="checkbox"
-                  class="in"
+                  className="in"
                   value="5"
-                  onChange={handleChange}
+                  onChange={(e) => {handleChange(e)}}
                 />
                 <p>psychic</p>
                 <input
                   type="checkbox"
-                  class="in"
+                  className="in"
                   value="6"
-                  onChange={handleChange}
+                  onChange={(e) => {handleChange(e)}}
                 />
                 <p>dragon</p>
               </div>
               <div className={style.check}>
                 <input
                   type="checkbox"
-                  class="in"
+                  className="in"
                   value="7"
-                  onChange={handleChange}
+                  onChange={(e) => {handleChange(e)}}
                 />
                 <p>fighting</p>
                 <input
                   type="checkbox"
-                  class="in"
+                  className="in"
                   value="8"
-                  onChange={handleChange}
+                  onChange={(e) => {handleChange(e)}}
                 />
                 <p>rock</p>
                 <input
                   type="checkbox"
-                  class="in"
+                  className="in"
                   value="9"
-                  onChange={handleChange}
+                  onChange={(e) => {handleChange(e)}}
                 />
                 <p>water</p>
                 <input
                   type="checkbox"
-                  class="in"
+                  className="in"
                   value="10"
-                  onChange={handleChange}
+                  onChange={(e) => {handleChange(e)}}
                 />
                 <p>dark</p>
                 <input
                   type="checkbox"
-                  class="in"
+                  className="in"
                   value="11"
-                  onChange={handleChange}
+                  onChange={(e) => {handleChange(e)}}
                 />
                 <p>normal</p>
                 <input
                   type="checkbox"
-                  class="in"
+                  className="in"
                   value="12"
-                  onChange={handleChange}
+                  onChange={(e) => {handleChange(e)}}
                 />
                 <p>bug</p>
                 <input
                   type="checkbox"
-                  class="in"
+                  className="in"
                   value="13"
-                  onChange={handleChange}
+                  onChange={(e) => {handleChange(e)}}
                 />
                 <p>grass</p>
                 <input
                   type="checkbox"
-                  class="in"
+                  className="in"
                   value="14"
-                  onChange={handleChange}
-                />
+                  onChange={(e) => {handleChange(e)}}                />
                 <p>fairy</p>
                 <input
                   type="checkbox"
-                  class="in"
+                  className="in"
                   value="15"
-                  onChange={handleChange}
-                />
+                  onChange={(e) => {handleChange(e)}}                />
                 <p>poison</p>
                 <input
                   type="checkbox"
-                  class="in"
+                  className="in"
                   value="16"
-                  onChange={handleChange}
-                />
+                  onChange={(e) => {handleChange(e)}}                />
                 <p>fire</p>
                 <input
                   type="checkbox"
-                  class="in"
+                  className="in"
                   value="17"
-                  onChange={handleChange}
-                />
+                  onChange={(e) => {handleChange(e)}}                />
                 <p>ice</p>
                 <input
                   type="checkbox"
-                  class="in"
+                  className="in"
                   value="18"
-                  onChange={handleChange}
-                />
+                  onChange={(e) => {handleChange(e)}}                />
                 <p>shadow</p>
                 <input
                   type="checkbox"
-                  class="in"
+                  className="in"
                   value="19"
-                  onChange={handleChange}
-                />
+                  onChange={(e) => {handleChange(e)}}                />
                 <p>unknown</p>
                 <input
                   type="checkbox"
-                  class="in"
+                  className="in"
                   value="20"
-                  onChange={handleChange}
-                />{" "}
+                  onChange={(e) => {handleChange(e)}}                />{" "}
                 <p>Free</p>
               </div>
               <div className={style.button}>
@@ -414,8 +384,7 @@ export default function NewPokemon() {
           </div>
         </div>
       </div>
-    </div>
-    </form> 
+    </div>     
   );
 }
 

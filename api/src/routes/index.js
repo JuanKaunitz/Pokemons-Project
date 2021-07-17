@@ -1,19 +1,14 @@
 const { Router } = require('express');
-// Importar todos los routers;
-// Ejemplo: const authRouter = require('./auth.js');
 const axios = require('axios');
-
 const { Pokemon, Type, Pokemon_Type} = require('../db');
-//const cors = require('cors');
 const { Op } = require('sequelize');
 const { v4: uuidv4 } = require('uuid')
 
 // Configurar los routers
-// Ejemplo: router.use('/auth', authRouter);
 
 const router = Router();
 
-//GET /:ID........................
+//GET pokemons/:id----------------------------------
 
 router.get('/pokemons/:id', async (req, res) => { 
     var detalles = [];
@@ -23,9 +18,11 @@ router.get('/pokemons/:id', async (req, res) => {
         const pokeId = await Pokemon.findOne({
             where: {
                 id: Id,
-            }, include: type,
+            }           
         }) 
-        return res.json(pokeId);
+        detalles.push(pokeId)
+        console.log(detalles[0].dataValues.name)
+        res.send(detalles);
     } else {
         let resp = await axios.get(`https://pokeapi.co/api/v2/pokemon/${Id}`);      
         if (resp.data) { 
@@ -48,8 +45,8 @@ router.get('/pokemons/:id', async (req, res) => {
     return res.json(detalles);  
 });
 
-//GET ALL...........................
-//Traigo la data de la API
+//GET pokemon/name && pokemon-----------------------------------
+
 const data = async () => {
     const array = await axios.get('https://pokeapi.co/api/v2/pokemon?limit=40&offset=0')
     //console.log('RESPUESTA DE API: ', array.data.results);
@@ -72,7 +69,7 @@ router.get('/pokemons', async (req, res) => {
         type: [],
         id: null
     }      
-    //console.log(name)
+    
     if (name) {     
         
         try {
@@ -132,6 +129,8 @@ router.get('/pokemons', async (req, res) => {
 });
 
 
+//POST newPokemon---------------------------------------------------
+
 router.post('/newPokemon', async (req, res) => {
     const { name, image, types,  life, attack, defense, height, weight, speed } = req.body;
     
@@ -139,8 +138,7 @@ router.post('/newPokemon', async (req, res) => {
         let poke = await Pokemon.create({                
                 name,
                 id: uuidv4(),
-                image,
-                types,                
+                image,                                
                 life,
                 attack,
                 defense,
@@ -148,23 +146,21 @@ router.post('/newPokemon', async (req, res) => {
                 weight,
                 height,         
             })  
-
-            /* if(type){
-                type.forEach(async (element)  => {
-                 let typePoke = await Type.findOne({
-                     where: {
-                         name:name
-                    }, include() //segun que lo tengo que buscar
-                 })
-                 await videogameCreated.addGenre(genresGame)
-                });
-            }   */
-          
-        res.send(poke)
+            
+    let typePoke = await Type.findAll({
+        where: {
+            name: {[Op.or]: types}
+        },
+    })
+    await poke.addType(typePoke)   
+    console.log(poke)        
+    return res.json(poke)
     } catch (error) {
         console.log(error)
     }
 });
+
+//GET TYPES----------------------------------------------------------
 
 const dataTypes = async () => {
     const array = await axios.get('https://pokeapi.co/api/v2/type')
@@ -174,19 +170,15 @@ const dataTypes = async () => {
 router.get('/types', async (req, res) => {
           
     try {           
-        let apiPokemonsTypes = await dataTypes();
-    /* let types = apiPokemonsTypes.results[i].name
-    arrayTypeDetails.push(types)   */  
+    let apiPokemonsTypes = await dataTypes();
+        
     apiPokemonsTypes.forEach( e => {
         Type.findOrCreate( {where: {
             name: e.name            
         }}) 
     })     
     const dBTypes = await Type.findAll()
-    res.json(dBTypes)                       
-    //console.log(pokemones.name)         
-//filtrar repetidos
-//enviarlos en la tabla types en dB
+    res.json(dBTypes)   
     } catch (error) {
     console.log(error)
     }    
