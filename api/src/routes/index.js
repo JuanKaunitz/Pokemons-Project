@@ -76,7 +76,8 @@ router.get('/pokemons', async (req, res) => {
             let dBPoke = await Pokemon.findOne({
                 where: {
                     name: name,
-                }
+                    
+                }, includes: Type
             })
 
             if(dBPoke) {
@@ -119,7 +120,7 @@ router.get('/pokemons', async (req, res) => {
                 }  
                 arrayPokemonsHome.push(newPokeObj)                        
             }             
-            let resp = await Pokemon.findAll()
+            let resp = await Pokemon.findAll({includes: Type})
             const sendPokemonsHome = resp.concat(arrayPokemonsHome)
             res.send(sendPokemonsHome)
         } catch (error) {
@@ -132,33 +133,71 @@ router.get('/pokemons', async (req, res) => {
 //POST newPokemon---------------------------------------------------
 
 router.post('/newPokemon', async (req, res) => {
-    const { name, image, types,  life, attack, defense, height, weight, speed } = req.body;
     
-     try {        
-        let poke = await Pokemon.create({                
-                name,
-                id: uuidv4(),
-                image,                                
-                life,
-                attack,
-                defense,
-                speed,
-                weight,
-                height,         
-            })  
-            
-    let typePoke = await Type.findAll({
-        where: {
-            name: {[Op.or]: types}
-        },
+    let promises = [];
+    //const {name, types, hp, atk, def, spd, height, weight} = req.body;
+    const { name, image, types,  life, attack, defense, height, weight, speed } = req.body;
+  
+  let futurePokemon = {
+    id: uuidv4(),
+    name: name.toLowerCase()
+  }
+
+  life ? futurePokemon.life = life : null;
+  attack ? futurePokemon.attack = attack : null;
+  defense ? futurePokemon.defense = defense : null;
+  speed ? futurePokemon.speed = speed : null;
+  height ? futurePokemon.height = height : null;
+  weight ? futurePokemon.weight = weight : null;
+
+  promises.push(Pokemon.create(futurePokemon))
+  
+  types.forEach(typeId => {
+    promises.push(Type.findByPk(parseInt(typeId)))
+  })
+
+  Promise.all(promises)
+    .then((response) => {
+      const pokemon = response.shift();
+      pokemon.addTypes(response);
+      res.send(pokemon);
     })
-    await poke.addType(typePoke)   
-    console.log(poke)        
-    return res.json(poke)
+    .catch((err) => next(err));
+})
+
+    /* try {        
+       let poke = await Pokemon.create({                
+               name,
+               id: uuidv4(),
+               image,                                
+               life,
+               attack,
+               defense,
+               speed,
+               weight,
+               height,         
+           })  
+           
+   let typePoke = await Type.findAll({
+       where: {
+           id: types
+       },
+   })
+   console.log('LLEGAN LOS TYPES: ??  ', typePoke)
+   await poke.addTypes(typePoke)
+   //await typePoke.forEach((type) =>  poke.addType(type)) 
+   const prueba = await Pokemon.findOne({
+       where:{
+           name: poke.name
+       }
+   })
+    //console.log(typePoke)  
+    console.log('QUE TRAE ESTO: ', prueba)        
+    return res.json(prueba)
     } catch (error) {
         console.log(error)
     }
-});
+}); */
 
 //GET TYPES----------------------------------------------------------
 
@@ -169,19 +208,47 @@ const dataTypes = async () => {
 
 router.get('/types', async (req, res) => {
           
-    try {           
-    let apiPokemonsTypes = await dataTypes();
-        
-    apiPokemonsTypes.forEach( e => {
-        Type.findOrCreate( {where: {
-            name: e.name            
-        }}) 
-    })     
-    const dBTypes = await Type.findAll()
-    res.json(dBTypes)   
+    try {  
+    let dBTypes = await Type.findAll()
+
+        if(!dBTypes.length ) {
+            
+            let apiPokemonsTypes = await dataTypes();
+            for(let i=0; i < apiPokemonsTypes.length; i++) {
+                await Type.create( {
+                    name: apiPokemonsTypes[i].name            
+                }) 
+            }
+           /*  apiPokemonsTypes.forEach( e => { ====>  // el forEach no acepta await!!!
+                Type.create( {
+                    name: e.name            
+                }) 
+            })      */
+            let dBTypes = await Type.findAll()
+            res.json(dBTypes) 
+        } 
+    console.log(dBTypes)
+    res.json(dBTypes)  
     } catch (error) {
     console.log(error)
     }    
+
+   /*  router.get('/types', async (req, res) => {
+          
+        try {           
+        let apiPokemonsTypes = await dataTypes();
+            
+        apiPokemonsTypes.forEach( e => {
+            Type.findOrCreate( {where: {
+                name: e.name            
+            }}) 
+        })     
+        const dBTypes = await Type.findAll()
+        res.json(dBTypes)   
+        } catch (error) {
+        console.log(error)
+        }    
+    }) */
 })
 
 

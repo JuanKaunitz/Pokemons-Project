@@ -24,7 +24,7 @@ export default function NewPokemon() {
   function handleChange(e) {
     let arr = [];
     let qwe = document.getElementsByClassName("in");
-    console.log(e.target.name);
+    //console.log(e.target.name);
     for (let i = 0; i < qwe.length; i++) {
       if (qwe[i].checked === true) {
         arr.push(parseInt(qwe[i].value));
@@ -43,36 +43,20 @@ export default function NewPokemon() {
         //[e.target.name]: e.target.value,
       })
       );
-    }
+  }
     
     async function handleSubmit(e) {
       e.preventDefault();
-    console.log(input);
+    //console.log(input);
     let qqq = Object.values(errors);
-    console.log(qqq, "asdasdas");
+    //console.log(qqq, "asdasdas");
     if (qqq.length === 0) {
       await dispatch(postPoke(input));
-      return alert("Pokemon Created!");
-      
+      return alert("Pokemon Created!");   
       
     } else {
-      return alert("You must need Complete the form!");
-    }
-    //   if (errors.name) {
-      //     return alert("You must need Complete the form!");
-      //   } else if (errors.summary) {
-        //     return alert("You must need Complete the form!");
-        //   } else if (errors.diets) {
-          //     return alert("You must need Complete the form!");
-    //   } else if (errors.spoonacularScore) {
-    //     return alert("You must need Complete the form!");
-    //   } else if (errors.healthScore) {
-    //     return alert("You must need Complete the form!");
-    //   } else {
-    //     axios
-    //       .post("http://localhost:3001/recipe", input)
-    //       .then((res) => alert("Receta Creada"));
-    //   }
+      return alert("You must need Complete the form!");    }
+    
   }
 
   function validate(input) {

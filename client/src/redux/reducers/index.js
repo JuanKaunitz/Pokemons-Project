@@ -4,10 +4,10 @@ import {
   SEARCH_POKE,
   GET_TYPE,
   GET_POKE_ID,
-  ORDER_ASC_ATTACK,
-  ORDER_DESC_ATTACK,
-  ORDER_ASC_NAME,
-  ORDER_DESC_NAME
+  az,
+  za,
+  ASC,
+  DESC
 } from "../constants";
 
 const initialState = {
@@ -15,9 +15,7 @@ const initialState = {
   addPoke: {}, 
   searchPoke: [],
   getTypes: [], 
-  getDetails: [],
-  orderBy: 'Order by: ',
-  filterPokes: [],
+  getDetails: [],  
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -51,29 +49,52 @@ const rootReducer = (state = initialState, action) => {
         ...state,
         getDetails: action.payload,
       };
-    case ORDER_ASC_NAME:
+    case az:      
+      const res = state.getPokes.sort((a, b) => {
+        const poke1 = a.name.toUpperCase();
+        const poke2 = b.name.toUpperCase();
+        if(poke1 < poke2) {
+          return -1
+        }
+        if(poke1 > poke2) {
+          return 1
+        } else {
+          return 0
+        }
+      })      
+      
       return {
-        ...state,
-        filterPokes: action.payload.pokesOrder,
-        orderBy: action.payload.name,
+        ...state,        
+        getPokes: [...res],
       };
-    case ORDER_ASC_ATTACK:
+
+    case ASC:
+     const res3 = state.getPokes.sort((a, b) =>  a.attack - b.attack);     
       return {
-        ...state,
-        filterPokes: action.payload.pokesOrder,
-        orderBy: action.payload.name,
+        ...state,        
+        getPokes: [...res3],
       };
-    case ORDER_DESC_NAME:
+    case za:
+      const res2 = state.getPokes.sort((a, b) => {
+        const poke1 = a.name.toUpperCase();
+        const poke2 = b.name.toUpperCase();
+        if(poke1 > poke2) {
+          return -1
+        }
+        if(poke1 < poke2) {
+          return 1
+        } else {
+          return 0
+        }
+      })      
       return {
-        ...state,
-        filterPokes: action.payload.pokesOrder,
-        orderBy: action.payload.name,
+        ...state,        
+        getPokes: [...res2],
       };
-    case ORDER_DESC_ATTACK:
+    case DESC:
       return {
         ...state,
-        filterPokes: action.payload.pokesOrder,
-        orderBy: action.payload.name,
+        getPokes:'' ,
       };
   
 

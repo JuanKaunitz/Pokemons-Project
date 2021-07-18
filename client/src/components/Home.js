@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from "react";
 import { getAllPokemons, searchQueryPokes } from '../redux/actions/Actions';
 import { Link } from 'react-router-dom';
+
 import Order from './Order'
 import Card from "./Card";
 import SearchBar from "./SearchBar";
@@ -15,10 +16,7 @@ function Home() {
   const dispatch = useDispatch();
   const getPokes = useSelector((state) => state.getPokes);
   const searchPoke = useSelector((state) => state.searchPoke);
-  const filterBy = useSelector((state) => state.filterBy);
-  const orderBy = useSelector((state) => state.orderBy);
-  const filterPokes = useSelector((state) => state.filterPokes);
-  const { pokes/* , loading, error */ } = useSelector((state) => state.getPokes);  
+   
   
   const [name, setName] = useState("");
   const [search, setSearch] = useState(false);
@@ -28,7 +26,7 @@ function Home() {
   async function searchPokemon(name) {
     await dispatch(searchQueryPokes(name))        
   }
-  
+
   useEffect(() =>{
     if(search) {
       searchPokemon(name)      
@@ -37,10 +35,7 @@ function Home() {
     } 
   },[search]) 
   
-  filterBy === "Filter By" && orderBy === "Order By"
-    ? (allPokes = pokes.slice())
-    : (allPokes = filterPokes.slice());
-
+  
   
   return(
 

@@ -7,7 +7,7 @@ import './Pagination.css';
 export default function Pagination() {
   let dataLimit = 12;
   const getPokes = useSelector((state) => state.getPokes);
-  const [pages] = useState(Math.round(getPokes.length / dataLimit));
+  const [pages] = useState(Math.ceil(getPokes.length / dataLimit));
 
   const [currentPage, setCurrentPage] = useState(1);
 

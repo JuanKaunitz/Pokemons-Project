@@ -36,15 +36,7 @@ module.exports = (sequelize) => {
     },
     height: { 
       type: DataTypes.INTEGER,      
-    },
-     status: {
-      type: DataTypes.ENUM('order', 'page'),
-      allowNull: true,
-    }, 
-    mine: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-      defaultValue: false,
-    },
+    }
+    
   });
 };
