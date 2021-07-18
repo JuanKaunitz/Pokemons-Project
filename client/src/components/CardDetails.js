@@ -20,7 +20,7 @@ function CardDetails({getDetails}) {
             <h4>Types:</h4> 
             {
                 getDetails.types && getDetails.types.map((el,i) => {
-                    return <li key={i}>{el}</li>
+                    return <li key={i}>{el.name}</li>
                 } )
             }
         </div>

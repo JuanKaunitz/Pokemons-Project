@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const axios = require('axios');
-const { Pokemon, Type, Pokemon_Type} = require('../db');
+const { Pokemon, Type} = require('../db');
 const { Op } = require('sequelize');
 const { v4: uuidv4 } = require('uuid')
 
@@ -18,10 +18,10 @@ router.get('/pokemons/:id', async (req, res) => {
         const pokeId = await Pokemon.findOne({
             where: {
                 id: Id,
-            }           
+            }, include:[Type]           
         }) 
         detalles.push(pokeId)
-        console.log(detalles[0].dataValues.name)
+        //console.log(detalles[0].dataValues.name)
         res.send(detalles);
     } else {
         let resp = await axios.get(`https://pokeapi.co/api/v2/pokemon/${Id}`);      
@@ -37,7 +37,7 @@ router.get('/pokemons/:id', async (req, res) => {
             attack: resp.data.stats[1].base_stat,
             defense: resp.data.stats[2].base_stat,
             mine: false,
-            types: resp.data.types.map(e => (e.type.name))    
+            types: resp.data.types.map(e => (e.type))    
           });
         }
     }    
@@ -66,7 +66,7 @@ router.get('/pokemons', async (req, res) => {
     let pokemones = { 
         image: null,
         name: null, 
-        type: [],
+        types: [],
         id: null,
         attack: null
     }      
@@ -78,7 +78,7 @@ router.get('/pokemons', async (req, res) => {
                 where: {
                     name: name,
                     
-                }, includes: Type
+                }, include:[ Type]
             })
 
             if(dBPoke) {
@@ -94,8 +94,8 @@ router.get('/pokemons', async (req, res) => {
                 pokemones.image = pokeName.data.sprites.front_default
                 pokemones.id = pokeName.data.id
                 pokemones.attack = pokeName.data.stats[1].base_stat
-                let finalTypes = pokeName.data.types.map(e => (e.type.name))
-                pokemones.type = finalTypes 
+                let finalTypes = pokeName.data.types.map(e => (e.type))
+                pokemones.types = finalTypes 
 
                 res.send(pokemones);
             }
@@ -114,15 +114,17 @@ router.get('/pokemons', async (req, res) => {
                 pokemones.id = pokeObj.id
                 pokemones.attack = pokeObj.stats[1].base_stat
                 
-                let finalTypes = pokeObj.types.map(e => (e.type.name))
-                pokemones.type = finalTypes             
+                let finalTypes = pokeObj.types.map(e => (e.type))
+                pokemones.types = finalTypes             
                 
                 let newPokeObj = {
                     ...pokemones
                 }  
                 arrayPokemonsHome.push(newPokeObj)                        
-            }             
-            let resp = await Pokemon.findAll({includes: Type})
+            }  
+
+            let resp = await Pokemon.findAll({include: [Type]})
+            console.log(resp)
             const sendPokemonsHome = resp.concat(arrayPokemonsHome)
             res.send(sendPokemonsHome)
         } catch (error) {
@@ -136,11 +138,11 @@ router.get('/pokemons', async (req, res) => {
 
 router.post('/newPokemon', async (req, res) => {
     
-    let promises = [];
+   // let promises = [];
     //const {name, types, hp, atk, def, spd, height, weight} = req.body;
     const { name, image, types,  life, attack, defense, height, weight, speed } = req.body;
   
-  let futurePokemon = {
+  /* let futurePokemon = {
     id: uuidv4(),
     name: name.toLowerCase()
   }
@@ -166,8 +168,8 @@ router.post('/newPokemon', async (req, res) => {
     })
     .catch((err) => next(err));
 })
-
-    /* try {        
+ */
+    try {        
        let poke = await Pokemon.create({                
                name,
                id: uuidv4(),
@@ -180,26 +182,27 @@ router.post('/newPokemon', async (req, res) => {
                height,         
            })  
            
-   let typePoke = await Type.findAll({
+   /* let typePoke = await Type.findAll({
        where: {
            id: types
        },
-   })
-   console.log('LLEGAN LOS TYPES: ??  ', typePoke)
-   await poke.addTypes(typePoke)
+   }) */
+   await poke.setTypes(types)
+   //console.log('LLEGAN LOS TYPES: ??  ', typePoke)
+   //await poke.addTypes(typePoke)
    //await typePoke.forEach((type) =>  poke.addType(type)) 
-   const prueba = await Pokemon.findOne({
+   /* const prueba = await Pokemon.findOne({
        where:{
            name: poke.name
        }
-   })
+   }) */
     //console.log(typePoke)  
-    console.log('QUE TRAE ESTO: ', prueba)        
-    return res.json(prueba)
+    //console.log('QUE TRAE ESTO: ', prueba)        
+    return res.json(poke)
     } catch (error) {
         console.log(error)
     }
-}); */
+});
 
 //GET TYPES----------------------------------------------------------
 
@@ -229,7 +232,7 @@ router.get('/types', async (req, res) => {
             let dBTypes = await Type.findAll()
             res.json(dBTypes) 
         } 
-    console.log(dBTypes)
+    
     res.json(dBTypes)  
     } catch (error) {
     console.log(error)

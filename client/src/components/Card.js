@@ -8,8 +8,8 @@ function Card({poke}) {
             <img className = "img-card" src= {poke.image} alt = "img not found"/>
             <h4>Types:</h4> 
             {
-                poke.type && poke.type.map((el,i) => {
-                    return <li key={i}>{el}</li>
+                poke.types && poke.types.map((el,i) => {
+                    return <li key={i}>{el.name}</li>
                 } )
             }
         </div>

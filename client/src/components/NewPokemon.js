@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import style from "./NewPokemon.css";
 import { useDispatch } from 'react-redux';
 import { postPoke } from "../redux/actions/Actions";
-
+import  img from '../images/pokeDetails.jpg';
 
 export default function NewPokemon() {
 
@@ -10,8 +10,7 @@ export default function NewPokemon() {
   const [errors, setErrors] = useState({});
   const [input, setInput] = useState({
     name: "",
-    image:    
-    "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80",
+    image: "",
     types: [],
     life: 0,
     attack: 0,
@@ -225,48 +224,48 @@ export default function NewPokemon() {
                 <hr />
               </div>
               <div className={style.check}>
-              <p>flying</p>
+              <p>normal</p>
                 <input
                   type="checkbox"
                   className="in"
                   value="1"
                   onChange={(e) => {handleChange(e)}}
                 />
-                <p>ground</p>
+                <p>fighting</p>
                 <input
                   type="checkbox"
                   className="in"
                   value="2"
                   onChange={(e) => {handleChange(e)}}
                 />
-                <p>ghost</p>
+                <p>flying</p>
                 <input
                   type="checkbox"
                   className="in"
                   value="3"
                   onChange={(e) => {handleChange(e)}}                />
-                <p>steel</p>
+                <p>poison</p>
                 <input
                   type="checkbox"
                   className="in"
                   value="4"
                   onChange={(e) => {handleChange(e)}}
                 />
-                <p>electric</p>
+                <p>ground</p>
                 <input
                   type="checkbox"
                   className="in"
                   value="5"
                   onChange={(e) => {handleChange(e)}}
                 />
-                <p>psychic</p>
+                <p>rock</p>
                 <input
                   type="checkbox"
                   className="in"
                   value="6"
                   onChange={(e) => {handleChange(e)}}
                 />
-                <p>dragon</p>
+                <p>bug</p>
               </div>
               <div className={style.check}>
                 <input
@@ -275,91 +274,91 @@ export default function NewPokemon() {
                   value="7"
                   onChange={(e) => {handleChange(e)}}
                 />
-                <p>fighting</p>
+                <p>ghost</p>
                 <input
                   type="checkbox"
                   className="in"
                   value="8"
                   onChange={(e) => {handleChange(e)}}
                 />
-                <p>rock</p>
+                <p>steel</p>
                 <input
                   type="checkbox"
                   className="in"
                   value="9"
                   onChange={(e) => {handleChange(e)}}
                 />
-                <p>water</p>
+                <p>fire</p>
                 <input
                   type="checkbox"
                   className="in"
                   value="10"
                   onChange={(e) => {handleChange(e)}}
                 />
-                <p>dark</p>
+                <p>water</p>
                 <input
                   type="checkbox"
                   className="in"
                   value="11"
                   onChange={(e) => {handleChange(e)}}
                 />
-                <p>normal</p>
+                <p>grass</p>
                 <input
                   type="checkbox"
                   className="in"
                   value="12"
                   onChange={(e) => {handleChange(e)}}
                 />
-                <p>bug</p>
+                <p>electric</p>
                 <input
                   type="checkbox"
                   className="in"
                   value="13"
                   onChange={(e) => {handleChange(e)}}
                 />
-                <p>grass</p>
+                <p>psychic</p>
                 <input
                   type="checkbox"
                   className="in"
                   value="14"
                   onChange={(e) => {handleChange(e)}}                />
-                <p>fairy</p>
+                <p>ice</p>
                 <input
                   type="checkbox"
                   className="in"
                   value="15"
                   onChange={(e) => {handleChange(e)}}                />
-                <p>poison</p>
+                <p>dragon</p>
                 <input
                   type="checkbox"
                   className="in"
                   value="16"
                   onChange={(e) => {handleChange(e)}}                />
-                <p>fire</p>
+                <p>dark</p>
                 <input
                   type="checkbox"
                   className="in"
                   value="17"
                   onChange={(e) => {handleChange(e)}}                />
-                <p>ice</p>
+                <p>fairy</p>
                 <input
                   type="checkbox"
                   className="in"
                   value="18"
                   onChange={(e) => {handleChange(e)}}                />
-                <p>shadow</p>
+                <p>unknown</p>
                 <input
                   type="checkbox"
                   className="in"
                   value="19"
                   onChange={(e) => {handleChange(e)}}                />
-                <p>unknown</p>
+                <p>shadow</p>
                 <input
                   type="checkbox"
                   className="in"
                   value="20"
                   onChange={(e) => {handleChange(e)}}                />{" "}
-                <p>Free</p>
+                
               </div>
               <div className={style.button}>
                 <button type="submit"> Create Pokemon</button>
