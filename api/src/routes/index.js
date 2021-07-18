@@ -67,7 +67,8 @@ router.get('/pokemons', async (req, res) => {
         image: null,
         name: null, 
         type: [],
-        id: null
+        id: null,
+        attack: null
     }      
     
     if (name) {     
@@ -92,6 +93,7 @@ router.get('/pokemons', async (req, res) => {
                 pokemones.name = pokeName.data.name
                 pokemones.image = pokeName.data.sprites.front_default
                 pokemones.id = pokeName.data.id
+                pokemones.attack = pokeName.data.stats[1].base_stat
                 let finalTypes = pokeName.data.types.map(e => (e.type.name))
                 pokemones.type = finalTypes 
 
@@ -106,11 +108,11 @@ router.get('/pokemons', async (req, res) => {
         try {     
             for(var i=0; i < apiPokemons.length; i++) {            
                 let pokeObj = await getPokemonDetails(apiPokemons[i].url)
-                             
+                            
                 pokemones.name = pokeObj.name
                 pokemones.image = pokeObj.sprites.front_default
                 pokemones.id = pokeObj.id
-                
+                pokemones.attack = pokeObj.stats[1].base_stat
                 
                 let finalTypes = pokeObj.types.map(e => (e.type.name))
                 pokemones.type = finalTypes             

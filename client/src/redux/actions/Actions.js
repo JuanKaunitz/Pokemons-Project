@@ -7,7 +7,8 @@ import {
     ORDER_ASC_ATTACK,
     ORDER_ASC_NAME,
     ORDER_DESC_ATTACK, 
-    ORDER_DESC_NAME   
+    ORDER_DESC_NAME,
+    FILTER   
 } from '../constants';
 
 import axios from 'axios';
@@ -98,6 +99,14 @@ export const orderBy = (sort) => (dispatch) => {
     //console.log(sort)    
     dispatch({
         type: sort,        
+      })    
+  };
+
+  export const filterBy = (filter) => (dispatch) => {  
+    //console.log('QUE ESTAMOS BUSCANDO: ',filter, typeof(filter))    
+    dispatch({
+        type: FILTER, 
+        payload: filter       
       })    
   };
   

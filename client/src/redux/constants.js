@@ -6,4 +6,5 @@ export const ADD_NEW_POKE = "ADD_NEW_POKE";
 export const az = "az";
 export const za = "za";
 export const ASC = "ASC";
-export const DESC = "DESC"
+export const DESC = "DESC";
+export const FILTER = 'FILTER';

@@ -7,15 +7,17 @@ import {
   az,
   za,
   ASC,
-  DESC
+  DESC,
+  FILTER,
 } from "../constants";
 
-const initialState = {
+const initialState = { 
+  originalPokes: [],      
   getPokes: [], 
   addPoke: {}, 
   searchPoke: [],
   getTypes: [], 
-  getDetails: [],  
+  getDetails: [],    
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -92,11 +94,25 @@ const rootReducer = (state = initialState, action) => {
         getPokes: [...res2],
       };
     case DESC:
+      const res4 = state.getPokes.sort((a, b) =>  b.attack - a.attack);     
+      return {
+        ...state,        
+        getPokes: [...res4],
+      };
+    case FILTER:
+      if(action.payload === 'null') {
+        return {
+          ...state,
+          getPokes: state.originalPokes
+        }
+      };
+      state.originalPokes = state.getPokes;
+      const filter = state.getPokes.filter(poke => poke.type.includes(action.payload));
+      console.log(filter)
       return {
         ...state,
-        getPokes:'' ,
+       // getPokes: [...filter] 
       };
-  
 
     default:
       return state;

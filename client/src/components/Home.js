@@ -2,7 +2,7 @@ import React from 'react';
 import './Home.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from "react";
-import { getAllPokemons, searchQueryPokes } from '../redux/actions/Actions';
+import { getType, getAllPokemons, searchQueryPokes } from '../redux/actions/Actions';
 import { Link } from 'react-router-dom';
 
 import Order from './Order'
@@ -10,6 +10,7 @@ import Card from "./Card";
 import SearchBar from "./SearchBar";
 import { useState } from 'react';
 import Pagination from './Pagination';
+import Filter from './Filter';
 
 function Home() {
 
@@ -31,6 +32,7 @@ function Home() {
     if(search) {
       searchPokemon(name)      
     } else {
+      dispatch(getType()) 
       dispatch(getAllPokemons());
     } 
   },[search]) 
@@ -45,7 +47,8 @@ function Home() {
     <ul>
     <h2>Look for your favourite Pokemon</h2>
     <Order ></Order>
-      {  
+    <Filter ></Filter>
+      { 
         search ? 
           <Link to={`/details/${searchPoke.id}`} >          
             <Card poke = {searchPoke} key = {searchPoke.id}/>        
