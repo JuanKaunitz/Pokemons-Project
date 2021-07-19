@@ -22,3 +22,20 @@ describe('Pokemon routes', () => {
     );
   });
 });
+
+let type = { name: 'TestType'}
+describe('Types routes', () => {
+  before(() => conn.authenticate()
+  .catch((err) => {
+    console.error('Unable to connect to the database:', err);
+  }));
+  beforeEach(() => Type.sync({ force: true })
+    .then(() => Type.create(type)));
+  describe('GET /Types', () => {
+    it('should get 200', () =>
+      agent.get('/types')
+      .expect(200)
+
+    );
+  });
+});

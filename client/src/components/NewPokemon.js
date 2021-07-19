@@ -2,22 +2,31 @@ import React, { useState } from "react";
 import style from "./NewPokemon.css";
 import { useDispatch } from 'react-redux';
 import { postPoke } from "../redux/actions/Actions";
-import  img from '../images/pokeDetails.jpg';
+
 
 export default function NewPokemon() {
 
+  const arr = [
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTOFV-PesNODBYgkwGjn2RbZAFk9pZTpVEjpJfsdbq1yOe549gLLLFyBQF7VU86r8DP1DTQTkQWFrg&usqp=CAU",
+    "https://d2skuhm0vrry40.cloudfront.net/2021/articles/2021-07-06-10-54/Pokemon_Cyndaquil.jpg/EG11/resize/480x-1/quality/75/format/jpg",
+    "https://id.portal-pokemon.com/assets_c/2018/04/Zeraora-thumb-650x488-12320.jpg",
+    "https://cnet4.cbsistatic.com/img/uiHcuKbhA5pN2tkimhF0DRrY7qk=/570x0/2016/07/08/f0f6bcb0-bfc4-4a27-8a91-deb051c0e7a5/foto3.jpg"
+  ]
+  const random = () => Math.floor(Math.random() * arr.length); 
+ 
   const dispatch = useDispatch();
   const [errors, setErrors] = useState({});
   const [input, setInput] = useState({
     name: "",
-    image: "",
+    image: arr[random()],
     types: [],
     life: 0,
     attack: 0,
     defense: 0,
     speed: 0,
     weight: 0,
-    height: 0
+    height: 0,
+    mine: true
   });
   
   function handleChange(e) {
@@ -37,10 +46,9 @@ export default function NewPokemon() {
     });
     
     setErrors(
-      validate({
-        ...input,
-        //[e.target.name]: e.target.value,
-      })
+      validate(
+        input        
+      )
       );
   }
     
@@ -48,7 +56,7 @@ export default function NewPokemon() {
       e.preventDefault();
     //console.log(input);
     let qqq = Object.values(errors);
-    //console.log(qqq, "asdasdas");
+    console.log('ERRORS: ', errors);
     if (qqq.length === 0) {
       await dispatch(postPoke(input));
       return alert("Pokemon Created!");   
@@ -60,7 +68,7 @@ export default function NewPokemon() {
 
   function validate(input) {
     let errors = {};    
-
+    console.log(input)
     if (!input.name) {
       errors.name = "Name is required";
     }    

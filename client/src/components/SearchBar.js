@@ -10,15 +10,23 @@ const SearchBar = (props) => {
         e.preventDefault()
         props.setSearch(true)
     }
+    const onClickXHandler = (e) => {
+        e.preventDefault()  
+        props.setName("")      
+        props.setSearch(false)
+    }
+
     return (
         <form >
         <label >Search Pokemon</label>
         <input
             type="text"            
-            placeholder="Search Pokemon"             
+            placeholder="..."
+            value={props.name}             
             onChange={(e) => {handleInputChange(e)}}  
             />
         <button onClick={(e) => {onClickHandler(e)}} type="submit">Search</button>
+        <button onClick={(e) => {onClickXHandler(e)}} >X</button>
     </form>
   )
 };

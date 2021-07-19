@@ -21,8 +21,9 @@ function Home() {
   
   const [name, setName] = useState("");
   const [search, setSearch] = useState(false);
+
   //const [displayResults, setDisplayResults] = useState(getPokes)
-  let allPokes;
+  //let allPokes;
   
   async function searchPokemon(name) {
     await dispatch(searchQueryPokes(name))        
@@ -42,12 +43,13 @@ function Home() {
   return(
 
   <div className='Home' >
-    <SearchBar setSearch={setSearch} setName={setName} ></SearchBar>   
+    <SearchBar setSearch={setSearch} setName={setName} name={name} ></SearchBar>   
     
     <ul>
     <h2>Look for your favourite Pokemon</h2>
     <Order ></Order>
     <Filter ></Filter>
+    <div className="wrapper">
       { 
         search ? 
           <Link to={`/details/${searchPoke.id}`} >          
@@ -56,6 +58,7 @@ function Home() {
         :      
         (getPokes.length > 0 ? <Pagination></Pagination> : <h1>Loading ...</h1>)
       }
+    </div>
     </ul> 
   </div>
   )

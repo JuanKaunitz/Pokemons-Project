@@ -14,6 +14,10 @@ module.exports = (sequelize) => {
       //autoIncrement: true,
       primaryKey: true 
     },
+    mine: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+    },
     image: {
       type: DataTypes.STRING,
       allowNull: true,

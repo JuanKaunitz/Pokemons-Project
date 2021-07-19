@@ -3,12 +3,9 @@ import {
     SEARCH_POKE,
     GET_TYPE,
     GET_POKE_ID,
-    ADD_NEW_POKE,
-    ORDER_ASC_ATTACK,
-    ORDER_ASC_NAME,
-    ORDER_DESC_ATTACK, 
-    ORDER_DESC_NAME,
-    FILTER   
+    ADD_NEW_POKE,    
+    FILTER, 
+    FILTER_MINE  
 } from '../constants';
 
 import axios from 'axios';
@@ -106,6 +103,14 @@ export const orderBy = (sort) => (dispatch) => {
     //console.log('QUE ESTAMOS BUSCANDO: ',filter, typeof(filter))    
     dispatch({
         type: FILTER, 
+        payload: filter       
+      })    
+  };
+
+  export const filterMine = (filter) => (dispatch) => {  
+    console.log('QUE ESTAMOS BUSCANDO: ',filter)    
+    dispatch({
+        type: FILTER_MINE, 
         payload: filter       
       })    
   };

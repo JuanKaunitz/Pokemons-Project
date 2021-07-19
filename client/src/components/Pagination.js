@@ -6,6 +6,7 @@ import './Pagination.css';
 
 export default function Pagination() {
   let dataLimit = 12;
+
   const getPokes = useSelector((state) => state.getPokes);
   const [pages] = useState(Math.ceil(getPokes.length / dataLimit));
 
@@ -29,8 +30,8 @@ export default function Pagination() {
       <div>
         <div >
           <button className={`${currentPage === 1 ? 'disabled' : ''}`} onClick={goToPreviousPage} >Prev</button> 
-          <h5 className='box'>Pag: {currentPage}</h5> 
-          <button className={`${currentPage === pages ? 'disabled' : ''}`} onClick={goToNextPage} >Next</button>
+          <h5 className='box'>Pag: {currentPage}</h5>           
+          <button className={`${currentPage === Math.ceil(getPokes.length / dataLimit) ? 'disabled' : ''}`} onClick={goToNextPage} >Next</button>
         </div>
 
         {getPaginatedData().map(poke => (   

@@ -9,6 +9,7 @@ import {
   ASC,
   DESC,
   FILTER,
+  FILTER_MINE,
 } from "../constants";
 
 const initialState = { 
@@ -23,15 +24,17 @@ const initialState = {
 const rootReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_ALL_POKEMONS:
+      
       return {
         ...state,
         getPokes: action.payload,
+        originalPokes: action.payload,
       };
 
     case ADD_NEW_POKE:
       return {
         ...state,
-        addPoke: action.payload,
+        addPoke: action.payload,        
       };
 
     case SEARCH_POKE:
@@ -51,7 +54,9 @@ const rootReducer = (state = initialState, action) => {
         ...state,
         getDetails: action.payload,
       };
-    case az:      
+      
+    case az:  
+        
       const res = state.getPokes.sort((a, b) => {
         const poke1 = a.name.toUpperCase();
         const poke2 = b.name.toUpperCase();
@@ -104,15 +109,45 @@ const rootReducer = (state = initialState, action) => {
         return {
           ...state,
           getPokes: state.originalPokes
+        } 
+      };      
+
+      const filter = state.originalPokes.filter(poke => {
+        //console.log(poke.types)
+        for(let i=0; i < poke.types.length; i++) {
+          if(poke.types[i].name === action.payload)  {
+            return true
+          } 
         }
-      };
-      state.originalPokes = state.getPokes;
-      const filter = state.getPokes.filter(poke => poke.type.includes(action.payload));
-      console.log(filter)
+        return false
+      } );      
+      
       return {
         ...state,
-       // getPokes: [...filter] 
+       getPokes: filter,
       };
+
+      
+      case FILTER_MINE: 
+      if(action.payload === 'null') {
+        return {
+          ...state,
+          getPokes: state.originalPokes
+        } 
+      };   
+      let filterMine = []
+      if(action.payload === 'dB') {
+        filterMine = state.originalPokes.filter(poke => poke.mine === true);
+        
+      } else {
+        filterMine = state.originalPokes.filter(poke => poke.mine === false);
+      }
+      console.log('MIS HIJITOS: ',filterMine)
+      
+      return {
+        ...state,
+       getPokes: filterMine,
+      }
 
     default:
       return state;
