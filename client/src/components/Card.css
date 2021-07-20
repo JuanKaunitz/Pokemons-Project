@@ -1,5 +1,5 @@
 .img-card {
-    display: flex;
+    
     justify-content: space-between;
     align-items:center ;
     /* width: 270px;
@@ -12,13 +12,15 @@
 }
 
 .card {
-    border: black solid;
-    margin: 20px;
-    width: 18rem;
+  border: #d9c0c0 solid;
+  margin: 20px;
+  width: 18rem;
+  background-color: #ecd1d1;
   }
   
   .card-title {
     margin-bottom: 15px;
+    text-align: justify;
   }
   
   #closeIcon {

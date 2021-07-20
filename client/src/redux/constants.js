@@ -9,3 +9,4 @@ export const ASC = "ASC";
 export const DESC = "DESC";
 export const FILTER = 'FILTER';
 export const FILTER_MINE = 'FILTER_MINE';
+export const NULL = 'null';

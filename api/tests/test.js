@@ -44,7 +44,6 @@ describe('Pokemon routes', () => {
   import { MemoryRouter } from 'react-router-dom'
   test('renders learn react link', () => {
     render(<Home/>);
-    expect(screen.getAllByText('Find any recipe you want!')).toHaveLength(1)
-  
+    expect(screen.getAllByText('Find any recipe you want!')).toHaveLength(1)  
   
   });

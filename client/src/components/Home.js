@@ -45,11 +45,11 @@ function Home() {
   <div className='Home' >
     <SearchBar setSearch={setSearch} setName={setName} name={name} ></SearchBar>   
     
-    <ul>
+    <div>
     <h2>Look for your favourite Pokemon</h2>
     <Order ></Order>
     <Filter ></Filter>
-    <div className="wrapper">
+    <div >
       { 
         search ? 
           <Link to={`/details/${searchPoke.id}`} >          
@@ -59,7 +59,7 @@ function Home() {
         (getPokes.length > 0 ? <Pagination></Pagination> : <h1>Loading ...</h1>)
       }
     </div>
-    </ul> 
+    </div> 
   </div>
   )
 }

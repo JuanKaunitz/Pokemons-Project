@@ -27,19 +27,21 @@ export default function Pagination() {
   };        
 
   return (
-      <div>
+      <div >
         <div >
           <button className={`${currentPage === 1 ? 'disabled' : ''}`} onClick={goToPreviousPage} >Prev</button> 
           <h5 className='box'>Pag: {currentPage}</h5>           
           <button className={`${currentPage === Math.ceil(getPokes.length / dataLimit) ? 'disabled' : ''}`} onClick={goToNextPage} >Next</button>
         </div>
 
-        {getPaginatedData().map(poke => (   
-        <ul key = {poke.id}> 
-          <Link  to = {`/details/${poke.id}`} /* mostrar el res de getDetails */ >          
-            <Card poke = {poke} key = {poke.id}/>
-          </Link>
-        </ul>))}        
+        <div className='grid-container'>
+          {getPaginatedData().map(poke => (   
+          <div className='grid-item' key = {poke.id}> 
+            <Link  to = {`/details/${poke.id}`} /* mostrar el res de getDetails */ >          
+              <Card poke = {poke} key = {poke.id}/>
+            </Link>
+          </div>))} 
+        </div>
       </div>
   )
 }

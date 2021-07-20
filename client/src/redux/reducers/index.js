@@ -54,7 +54,7 @@ const rootReducer = (state = initialState, action) => {
         ...state,
         getDetails: action.payload,
       };
-      
+
     case az:  
         
       const res = state.getPokes.sort((a, b) => {
@@ -113,7 +113,7 @@ const rootReducer = (state = initialState, action) => {
       };      
 
       const filter = state.originalPokes.filter(poke => {
-        //console.log(poke.types)
+        
         for(let i=0; i < poke.types.length; i++) {
           if(poke.types[i].name === action.payload)  {
             return true
@@ -141,8 +141,7 @@ const rootReducer = (state = initialState, action) => {
         
       } else {
         filterMine = state.originalPokes.filter(poke => poke.mine === false);
-      }
-      console.log('MIS HIJITOS: ',filterMine)
+      }      
       
       return {
         ...state,

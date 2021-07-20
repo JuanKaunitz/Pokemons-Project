@@ -20,3 +20,20 @@ describe('Pokemon model', () => {
     });
   });
 });
+
+describe('Pokemon routes', () => {
+  before(() => conn.authenticate()
+  .catch((err) => {
+    console.error('Unable to connect to the database:', err);
+  }));
+  beforeEach(() => Pokemon.sync({ force: true
+ })
+    .then(() => Pokemon.create(pokemon)));
+  describe('GET /pokemons', () => {
+    it('should get 200', () =>
+      agent.get('/pokemons?name=Pikach')
+      .expect(200)
+
+    );
+  });
+});
