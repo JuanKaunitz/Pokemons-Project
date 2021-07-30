@@ -10,15 +10,14 @@
 
 ## Project objectives
 
--Build an App using React, Redux, Node, Sequelize and psql.
-- GIT.
+-Build an App using React, Redux, Node, Sequelize, psql and GIT.
 - The Client folder is created with npx create-react-app
 - It would be better to have the latest versions of Node and NPM to run de project
 
 ## Starting the project
 
- 1. The project has two principal folders: api(backend) and client(frontend)
- 2. Download the project
+ 1. Download the project
+ 2. The project has two principal folders: api(backend) and client(frontend)
  3. Inside each folder run: npm install and npm start 
 
 
@@ -27,9 +26,9 @@
 In this aplication you will be able to see and search diferent Pokemon using de external API [pokeapi](https://pokeapi.co/) 
 From ther you can:
 
--Search for pokemons
--Filter and order them
--Create new pokemons
+- Search for pokemons
+- Filter and order them
+- Create new pokemons
 
 ### Endpoints/Flags used:
 
