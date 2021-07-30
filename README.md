@@ -24,7 +24,7 @@
 ## Main
 
 In this aplication you will be able to see and search diferent Pokemon using de external API [pokeapi](https://pokeapi.co/) 
-From ther you can:
+From there you can:
 
 - Search for pokemons
 - Filter and order them
